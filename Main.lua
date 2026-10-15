@@ -1,10 +1,10 @@
 
 
---[[
-    PHANTOM UI
-    Versao 0.1.0
-    Interface visual
-]]
+
+--==================================================
+-- PHANTOM | MENU V2
+-- Interface visual com páginas selecionáveis
+--==================================================
 
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
@@ -12,293 +12,445 @@ local UserInputService = game:GetService("UserInputService")
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 
--- Configuracao
-local PURPLE = Color3.fromRGB(155, 85, 255)
-local BG = Color3.fromRGB(17, 15, 24)
-local PANEL = Color3.fromRGB(27, 24, 37)
-local WHITE = Color3.fromRGB(245, 242, 255)
-local MUTED = Color3.fromRGB(165, 158, 180)
-
--- Evita duplicar a interface
-local old = playerGui:FindFirstChild("PhantomUI")
-if old then
-    old:Destroy()
+-- Remove uma interface anterior do mesmo nome
+local previous = playerGui:FindFirstChild("PhantomUI")
+if previous then
+    previous:Destroy()
 end
 
-local gui = Instance.new("ScreenGui")
-gui.Name = "PhantomUI"
-gui.ResetOnSpawn = false
-gui.IgnoreGuiInset = false
-gui.DisplayOrder = 20
-gui.Parent = playerGui
+-- CONFIGURAÇÃO
+local COLORS = {
+    Background = Color3.fromRGB(15, 15, 22),
+    Panel = Color3.fromRGB(23, 23, 34),
+    Element = Color3.fromRGB(32, 30, 46),
+    Purple = Color3.fromRGB(155, 90, 255),
+    White = Color3.fromRGB(240, 240, 250),
+    Gray = Color3.fromRGB(155, 155, 175),
+    Green = Color3.fromRGB(100, 230, 160)
+}
 
-local function create(class, props, parent)
-    local obj = Instance.new(class)
-    for key, value in pairs(props) do
-        obj[key] = value
+-- FUNÇÕES VISUAIS
+local function create(className, properties, parent)
+    local object = Instance.new(className)
+
+    for property, value in pairs(properties or {}) do
+        object[property] = value
     end
-    obj.Parent = parent
-    return obj
+
+    object.Parent = parent
+    return object
 end
 
-local function round(parent, radius)
+local function round(object, radius)
     create("UICorner", {
-        CornerRadius = UDim.new(0, radius)
-    }, parent)
+        CornerRadius = UDim.new(0, radius or 10)
+    }, object)
 end
 
-local function outline(parent, color, thickness)
+local function outline(object, color, thickness)
     create("UIStroke", {
-        Color = color,
+        Color = color or COLORS.Purple,
         Thickness = thickness or 1,
         Transparency = 0.15
-    }, parent)
+    }, object)
 end
 
--- Janela principal
-local window = create("Frame", {
-    Name = "Window",
-    Size = UDim2.fromOffset(320, 300),
-    Position = UDim2.new(0.5, -160, 0.5, -150),
-    BackgroundColor3 = BG,
-    BorderSizePixel = 0,
-    Visible = false
-}, gui)
-round(window, 14)
-outline(window, PURPLE, 1.5)
-
--- Cabecalho
-local header = create("Frame", {
-    Name = "Header",
-    Size = UDim2.new(1, 0, 0, 52),
-    BackgroundColor3 = PANEL,
-    BorderSizePixel = 0
-}, window)
-round(header, 14)
-
-create("Frame", {
-    Size = UDim2.new(1, 0, 0, 14),
-    Position = UDim2.new(0, 0, 1, -14),
-    BackgroundColor3 = PANEL,
-    BorderSizePixel = 0
-}, header)
-
-create("TextLabel", {
-    Position = UDim2.fromOffset(15, 5),
-    Size = UDim2.new(1, -65, 0, 25),
-    BackgroundTransparency = 1,
-    Text = "PHANTOM",
-    TextColor3 = WHITE,
-    Font = Enum.Font.GothamBold,
-    TextSize = 19,
-    TextXAlignment = Enum.TextXAlignment.Left
-}, header)
-
-create("TextLabel", {
-    Position = UDim2.fromOffset(16, 29),
-    Size = UDim2.new(1, -70, 0, 15),
-    BackgroundTransparency = 1,
-    Text = "INTERFACE  /  V0.1.0",
-    TextColor3 = MUTED,
-    Font = Enum.Font.Code,
-    TextSize = 9,
-    TextXAlignment = Enum.TextXAlignment.Left
-}, header)
-
-local close = create("TextButton", {
-    Size = UDim2.fromOffset(30, 30),
-    Position = UDim2.new(1, -40, 0, 10),
-    BackgroundColor3 = Color3.fromRGB(53, 35, 68),
-    Text = "X",
-    TextColor3 = WHITE,
-    Font = Enum.Font.GothamBold,
-    TextSize = 14,
-    BorderSizePixel = 0
-}, header)
-round(close, 8)
-
--- Barra lateral
-local sidebar = create("Frame", {
-    Position = UDim2.fromOffset(10, 63),
-    Size = UDim2.new(0, 92, 1, -73),
-    BackgroundColor3 = PANEL,
-    BorderSizePixel = 0
-}, window)
-round(sidebar, 10)
-
--- Area de conteudo
-local content = create("Frame", {
-    Position = UDim2.fromOffset(112, 63),
-    Size = UDim2.new(1, -122, 1, -73),
-    BackgroundTransparency = 1,
-    BorderSizePixel = 0
-}, window)
-
-local function label(parent, text, position, size, fontSize, color)
+local function makeLabel(parent, text, position, size, color, textSize)
     return create("TextLabel", {
+        BackgroundTransparency = 1,
         Position = position,
         Size = size,
-        BackgroundTransparency = 1,
-        Text = text,
-        TextColor3 = color or WHITE,
         Font = Enum.Font.Gotham,
-        TextSize = fontSize or 12,
-        TextWrapped = true,
+        Text = text,
+        TextColor3 = color or COLORS.White,
+        TextSize = textSize or 13,
         TextXAlignment = Enum.TextXAlignment.Left,
         TextYAlignment = Enum.TextYAlignment.Center
     }, parent)
 end
 
-label(content, "PRINCIPAL", UDim2.fromOffset(2, 3),
-    UDim2.new(1, -4, 0, 25), 15, PURPLE)
+-- GUI PRINCIPAL
+local gui = create("ScreenGui", {
+    Name = "PhantomUI",
+    ResetOnSpawn = false,
+    IgnoreGuiInset = true,
+    ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+}, playerGui)
 
-label(content, "Bem-vindo ao Phantom.",
-    UDim2.fromOffset(2, 32),
-    UDim2.new(1, -4, 0, 34), 11, MUTED)
 
-local status = create("Frame", {
-    Position = UDim2.fromOffset(2, 76),
-    Size = UDim2.new(1, -4, 0, 55),
-    BackgroundColor3 = PANEL,
+-- BOTÃO FLUTUANTE PHANTOM
+local openButton = create("ImageButton", {
+    Name = "OpenButton",
+    Size = UDim2.fromOffset(48, 48),
+    Position = UDim2.new(0, 18, 0.5, -24),
+    BackgroundColor3 = COLORS.Background,
+    Image = "",
+    Visible = false,
+    AutoButtonColor = true
+}, gui)
+
+round(openButton, 16)
+outline(openButton, COLORS.Purple, 2)
+
+-- Símbolo de máscara fantasma feito com elementos nativos
+local mask = create("Frame", {
+    Name = "PhantomMask",
+    AnchorPoint = Vector2.new(0.5, 0.5),
+    Position = UDim2.fromScale(0.5, 0.48),
+    Size = UDim2.fromOffset(27, 29),
+    BackgroundColor3 = COLORS.White,
     BorderSizePixel = 0
-}, content)
-round(status, 9)
+}, openButton)
 
-label(status, "STATUS", UDim2.fromOffset(10, 5),
-    UDim2.new(1, -20, 0, 18), 10, MUTED)
+round(mask, 12)
 
-label(status, "Interface carregada",
-    UDim2.fromOffset(10, 24),
-    UDim2.new(1, -20, 0, 22), 11, WHITE)
+-- Base inferior irregular da máscara
+local maskBase = create("Frame", {
+    Name = "MaskBase",
+    Position = UDim2.new(0, 2, 1, -9),
+    Size = UDim2.new(1, -4, 0, 8),
+    BackgroundColor3 = COLORS.White,
+    BorderSizePixel = 0
+}, mask)
 
-local pages = {}
+round(maskBase, 3)
 
-local function clearContent()
-    for _, child in ipairs(content:GetChildren()) do
-        if child.Name == "PageContent" then
-            child:Destroy()
-        end
-    end
-end
-
-local function showPage(pageName)
-    clearContent()
-
-    local page = create("Frame", {
-        Name = "PageContent",
-        Size = UDim2.fromScale(1, 1),
-        BackgroundTransparency = 1
-    }, content)
-
-    label(page, pageName:upper(),
-        UDim2.fromOffset(2, 3),
-        UDim2.new(1, -4, 0, 25), 15, PURPLE)
-
-    if pageName == "Principal" then
-        label(page, "Bem-vindo ao Phantom.",
-            UDim2.fromOffset(2, 32),
-            UDim2.new(1, -4, 0, 40), 11, MUTED)
-
-        label(page, "Menu visual pronto para personalizacao.",
-            UDim2.fromOffset(2, 77),
-            UDim2.new(1, -4, 0, 50), 11, WHITE)
-    else
-        label(page, "Tema: Roxo",
-            UDim2.fromOffset(2, 38),
-            UDim2.new(1, -4, 0, 25), 12, WHITE)
-
-        label(page, "Versao: 0.1.0",
-            UDim2.fromOffset(2, 68),
-            UDim2.new(1, -4, 0, 25), 12, MUTED)
-    end
-end
-
-local function makeTab(text, y, pageName)
-    local button = create("TextButton", {
-        Position = UDim2.fromOffset(6, y),
-        Size = UDim2.new(1, -12, 0, 36),
-        BackgroundColor3 = BG,
-        BackgroundTransparency = 1,
-        Text = text,
-        TextColor3 = MUTED,
-        Font = Enum.Font.GothamMedium,
-        TextSize = 11,
+-- Olhos roxos
+for _, x in ipairs({6, 17}) do
+    local eye = create("Frame", {
+        Position = UDim2.fromOffset(x, 10),
+        Size = UDim2.fromOffset(5, 7),
+        BackgroundColor3 = COLORS.Purple,
         BorderSizePixel = 0
+    }, mask)
+
+    round(eye, 3)
+end
+
+-- Pequena boca
+local mouth = create("Frame", {
+    Position = UDim2.fromOffset(11, 21),
+    Size = UDim2.fromOffset(5, 3),
+    BackgroundColor3 = COLORS.Purple,
+    BorderSizePixel = 0
+}, mask)
+
+round(mouth, 2)
+
+
+-- JANELA
+local window = create("Frame", {
+    Name = "MainWindow",
+    AnchorPoint = Vector2.new(0.5, 0.5),
+    Position = UDim2.fromScale(0.5, 0.5),
+    Size = UDim2.fromOffset(320, 300),
+    BackgroundColor3 = COLORS.Background,
+    BorderSizePixel = 0,
+    Visible = true,
+    ClipsDescendants = true
+}, gui)
+
+round(window, 14)
+outline(window, COLORS.Purple, 1.5)
+
+-- CABEÇALHO
+local header = create("Frame", {
+    Name = "Header",
+    Size = UDim2.new(1, 0, 0, 43),
+    BackgroundColor3 = COLORS.Panel,
+    BorderSizePixel = 0
+}, window)
+
+makeLabel(
+    header,
+    "◈  PHANTOM",
+    UDim2.fromOffset(13, 0),
+    UDim2.new(1, -60, 1, 0),
+    COLORS.White,
+    16
+).Font = Enum.Font.GothamBold
+
+local closeButton = create("TextButton", {
+    Name = "CloseButton",
+    Position = UDim2.new(1, -37, 0, 7),
+    Size = UDim2.fromOffset(28, 28),
+    BackgroundColor3 = COLORS.Element,
+    Text = "×",
+    TextColor3 = COLORS.White,
+    TextSize = 20,
+    Font = Enum.Font.GothamBold
+}, header)
+
+round(closeButton, 8)
+
+-- BARRA LATERAL
+local sidebar = create("Frame", {
+    Name = "Sidebar",
+    Position = UDim2.fromOffset(0, 43),
+    Size = UDim2.new(0, 92, 1, -43),
+    BackgroundColor3 = COLORS.Panel,
+    BorderSizePixel = 0
+}, window)
+
+-- ÁREA EXCLUSIVA DAS PÁGINAS
+local pageHost = create("Frame", {
+    Name = "PageHost",
+    Position = UDim2.fromOffset(102, 53),
+    Size = UDim2.new(1, -112, 1, -63),
+    BackgroundTransparency = 1,
+    ClipsDescendants = true
+}, window)
+
+-- PÁGINAS: criadas uma única vez
+local pages = {}
+local tabButtons = {}
+local currentPage = nil
+
+local function createPage(name)
+    local page = create("Frame", {
+        Name = name,
+        Size = UDim2.fromScale(1, 1),
+        BackgroundTransparency = 1,
+        Visible = false
+    }, pageHost)
+
+    pages[name] = page
+    return page
+end
+
+-- BOTÕES DE NAVEGAÇÃO
+local function createTab(name, text, yPosition)
+    local button = create("TextButton", {
+        Name = name .. "Tab",
+        Position = UDim2.fromOffset(7, yPosition),
+        Size = UDim2.new(1, -14, 0, 38),
+        BackgroundColor3 = COLORS.Element,
+        Text = text,
+        TextColor3 = COLORS.Gray,
+        TextSize = 12,
+        Font = Enum.Font.GothamMedium,
+        AutoButtonColor = true
     }, sidebar)
-    round(button, 7)
 
-    button.Activated:Connect(function()
-        for _, item in ipairs(sidebar:GetChildren()) do
-            if item:IsA("TextButton") then
-                item.BackgroundTransparency = 1
-                item.TextColor3 = MUTED
-            end
-        end
-
-        button.BackgroundTransparency = 0
-        button.BackgroundColor3 = Color3.fromRGB(52, 34, 72)
-        button.TextColor3 = WHITE
-        showPage(pageName)
-    end)
-
+    round(button, 8)
+    tabButtons[name] = button
     return button
 end
 
-local homeTab = makeTab("Principal", 9, "Principal")
-makeTab("Ajustes", 51, "Ajustes")
+createTab("Principal", "⌂  Principal", 13)
+createTab("Ajustes", "⚙  Ajustes", 57)
 
--- Botao flutuante para abrir
-local openButton = create("TextButton", {
-    Name = "OpenButton",
-    Size = UDim2.fromOffset(52, 52),
-    Position = UDim2.new(0, 18, 0.5, -26),
-    BackgroundColor3 = PANEL,
-    Text = "P",
-    TextColor3 = WHITE,
-    Font = Enum.Font.GothamBold,
-    TextSize = 24,
-    BorderSizePixel = 0,
-    Visible = true
-}, gui)
-round(openButton, 16)
-outline(openButton, PURPLE, 2)
+-- PÁGINA PRINCIPAL
+local home = createPage("Principal")
 
--- Abrir e fechar
-local function setOpen(value)
-    window.Visible = value
-    openButton.Visible = not value
+makeLabel(
+    home,
+    "PAINEL PRINCIPAL",
+    UDim2.fromOffset(0, 3),
+    UDim2.new(1, 0, 0, 24),
+    COLORS.Purple,
+    12
+).Font = Enum.Font.GothamBold
+
+local welcome = create("Frame", {
+    Position = UDim2.fromOffset(0, 34),
+    Size = UDim2.new(1, 0, 0, 67),
+    BackgroundColor3 = COLORS.Panel,
+    BorderSizePixel = 0
+}, home)
+
+round(welcome, 9)
+
+makeLabel(
+    welcome,
+    "Bem-vindo ao PHANTOM",
+    UDim2.fromOffset(10, 7),
+    UDim2.new(1, -20, 0, 22),
+    COLORS.White,
+    12
+).Font = Enum.Font.GothamBold
+
+makeLabel(
+    welcome,
+    "Interface visual • V2",
+    UDim2.fromOffset(10, 32),
+    UDim2.new(1, -20, 0, 20),
+    COLORS.Gray,
+    10
+)
+
+local statusCard = create("Frame", {
+    Position = UDim2.fromOffset(0, 111),
+    Size = UDim2.new(1, 0, 0, 62),
+    BackgroundColor3 = COLORS.Panel,
+    BorderSizePixel = 0
+}, home)
+
+round(statusCard, 9)
+
+makeLabel(
+    statusCard,
+    "STATUS",
+    UDim2.fromOffset(10, 5),
+    UDim2.new(1, -20, 0, 20),
+    COLORS.Gray,
+    10
+)
+
+local statusLabel = makeLabel(
+    statusCard,
+    "●  Interface ativa",
+    UDim2.fromOffset(10, 27),
+    UDim2.new(1, -20, 0, 23),
+    COLORS.Green,
+    12
+)
+
+makeLabel(
+    home,
+    "Selecione uma página na lateral.",
+    UDim2.fromOffset(0, 185),
+    UDim2.new(1, 0, 0, 35),
+    COLORS.Gray,
+    10
+)
+
+-- PÁGINA AJUSTES
+local settings = createPage("Ajustes")
+
+makeLabel(
+    settings,
+    "AJUSTES",
+    UDim2.fromOffset(0, 3),
+    UDim2.new(1, 0, 0, 24),
+    COLORS.Purple,
+    12
+).Font = Enum.Font.GothamBold
+
+local infoCard = create("Frame", {
+    Position = UDim2.fromOffset(0, 34),
+    Size = UDim2.new(1, 0, 0, 91),
+    BackgroundColor3 = COLORS.Panel,
+    BorderSizePixel = 0
+}, settings)
+
+round(infoCard, 9)
+
+makeLabel(
+    infoCard,
+    "Versão",
+    UDim2.fromOffset(10, 8),
+    UDim2.new(1, -20, 0, 20),
+    COLORS.Gray,
+    11
+)
+
+makeLabel(
+    infoCard,
+    "PHANTOM 0.2.0",
+    UDim2.fromOffset(10, 30),
+    UDim2.new(1, -20, 0, 23),
+    COLORS.White,
+    13
+).Font = Enum.Font.GothamBold
+
+makeLabel(
+    infoCard,
+    "Interface em desenvolvimento",
+    UDim2.fromOffset(10, 58),
+    UDim2.new(1, -20, 0, 20),
+    COLORS.Gray,
+    10
+)
+
+-- TROCA DE PÁGINA
+-- As páginas não são recriadas a cada clique.
+-- Somente a página escolhida fica visível.
+local function showPage(name)
+    if not pages[name] then
+        return
+    end
+
+    currentPage = name
+
+    for pageName, page in pairs(pages) do
+        page.Visible = (pageName == name)
+    end
+
+    for tabName, button in pairs(tabButtons) do
+        local selected = (tabName == name)
+
+        button.BackgroundColor3 = selected
+            and COLORS.Purple
+            or COLORS.Element
+
+        button.TextColor3 = selected
+            and COLORS.White
+            or COLORS.Gray
+    end
 end
 
+tabButtons.Principal.Activated:Connect(function()
+    showPage("Principal")
+end)
+
+tabButtons.Ajustes.Activated:Connect(function()
+    showPage("Ajustes")
+end)
+
+-- ABRIR E FECHAR
+local function setMenuOpen(isOpen)
+    window.Visible = isOpen
+    openButton.Visible = not isOpen
+end
+
+closeButton.Activated:Connect(function()
+    setMenuOpen(false)
+end)
+
 openButton.Activated:Connect(function()
-    setOpen(true)
+    setMenuOpen(true)
 end)
 
-close.Activated:Connect(function()
-    setOpen(false)
-end)
-
--- Arrastar janela pelo cabecalho
+-- ARRASTAR PELO CABEÇALHO (TOQUE OU MOUSE)
 local dragging = false
-local dragInput
 local dragStart
 local startPosition
+local dragInput
 
 header.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1
         or input.UserInputType == Enum.UserInputType.Touch then
+
         dragging = true
         dragStart = input.Position
         startPosition = window.Position
         dragInput = input
+
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+                dragInput = nil
+            end
+        end)
     end
 end)
 
 UserInputService.InputChanged:Connect(function(input)
-    if dragging and (
+    if not dragging then
+        return
+    end
+
+    local isMouseMove =
         input.UserInputType == Enum.UserInputType.MouseMovement
-        or input.UserInputType == Enum.UserInputType.Touch
-    ) then
+
+    local isTouchMove =
+        input.UserInputType == Enum.UserInputType.Touch
+        and dragInput ~= nil
+
+    if isMouseMove or isTouchMove then
         local delta = input.Position - dragStart
+
         window.Position = UDim2.new(
             startPosition.X.Scale,
             startPosition.X.Offset + delta.X,
@@ -308,19 +460,8 @@ UserInputService.InputChanged:Connect(function(input)
     end
 end)
 
-UserInputService.InputEnded:Connect(function(input)
-    if input == dragInput then
-        dragging = false
-        dragInput = nil
-    end
-end)
-
--- Pagina inicial
+-- INICIALIZAÇÃO
 showPage("Principal")
+setMenuOpen(true)
 
--- Marca a aba selecionada
-homeTab.BackgroundTransparency = 0
-homeTab.BackgroundColor3 = Color3.fromRGB(52, 34, 72)
-homeTab.TextColor3 = WHITE
-
-print("[PHANTOM] Interface criada.")
+print("[PHANTOM] Menu V2 carregado.")
