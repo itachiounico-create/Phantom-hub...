@@ -398,6 +398,70 @@ tabButtons.Ajustes.Activated:Connect(function()
     showPage("Ajustes")
 end)
 
+-- ARRASTAR O BOTÃO DA MÁSCARA NO CELULAR
+local buttonDragging = false
+local buttonDragStart
+local buttonStartPosition
+local buttonDragInput
+local buttonMoved = false
+
+openButton.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.Touch
+        or input.UserInputType == Enum.UserInputType.MouseButton1 then
+
+        buttonDragging = true
+        buttonMoved = false
+        buttonDragStart = input.Position
+        buttonStartPosition = openButton.Position
+        buttonDragInput = input
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if not buttonDragging then
+        return
+    end
+
+    local isMouseMove =
+        input.UserInputType == Enum.UserInputType.MouseMovement
+
+    local isTouchMove =
+        input.UserInputType == Enum.UserInputType.Touch
+
+    if isMouseMove or isTouchMove then
+        local delta = input.Position - buttonDragStart
+
+        if delta.Magnitude > 5 then
+            buttonMoved = true
+        end
+
+        openButton.Position = UDim2.new(
+            buttonStartPosition.X.Scale,
+            buttonStartPosition.X.Offset + delta.X,
+            buttonStartPosition.Y.Scale,
+            buttonStartPosition.Y.Offset + delta.Y
+        )
+    end
+end)
+
+UserInputService.InputEnded:Connect(function(input)
+    if input == buttonDragInput
+        or input.UserInputType == Enum.UserInputType.MouseButton1 then
+
+        buttonDragging = false
+        buttonDragInput = nil
+    end
+end)
+
+openButton.Activated:Connect(function()
+    if buttonMoved then
+        buttonMoved = false
+        return
+    end
+
+    setMenuOpen(true)
+end)
+
 -- ABRIR E FECHAR
 local function setMenuOpen(isOpen)
     window.Visible = isOpen
@@ -406,10 +470,6 @@ end
 
 closeButton.Activated:Connect(function()
     setMenuOpen(false)
-end)
-
-openButton.Activated:Connect(function()
-    setMenuOpen(true)
 end)
 
 -- ARRASTAR PELO CABEÇALHO (TOQUE OU MOUSE)
