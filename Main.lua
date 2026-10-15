@@ -226,20 +226,25 @@ round(topAccent, 2)
 local header = create("Frame", {
 Name = "Header",
 Size = UDim2.new(1, 0, 0, 46),
-BackgroundColor3 = Color3.fromRGB(24, 21, 37),
+BackgroundColor3 = Color3.fromRGB(29, 23, 45),
 BorderSizePixel = 0,
 ZIndex = 2
 }, window)
 
-label(
-header,
-"◈  PHANTOM",
-UDim2.fromOffset(13, 2),
-UDim2.new(1, -65, 0, 25),
-COLORS.White,
-16,
-true
-).ZIndex = 3
+
+local titleLabel = label(
+    header,
+    "◈  PHANTOM",
+    UDim2.fromOffset(13, 2),
+    UDim2.new(1, -65, 0, 25),
+    COLORS.White,
+    16,
+    true
+)
+
+titleLabel.ZIndex = 3
+titleLabel.TextStrokeColor3 = COLORS.Purple
+titleLabel.TextStrokeTransparency = 0.82
 
 label(
 header,
@@ -264,10 +269,10 @@ local closeButton = create("TextButton", {
 Name = "CloseButton",
 Position = UDim2.new(1, -38, 0, 9),
 Size = UDim2.fromOffset(27, 27),
-BackgroundColor3 = Color3.fromRGB(49, 32, 62),
-Text = "×",
+BackgroundColor3 = Color3.fromRGB(57, 32, 73),
 TextColor3 = COLORS.PurpleLight,
 TextSize = 21,
+Text = "×",
 Font = Enum.Font.GothamBold,
 AutoButtonColor = true,
 ZIndex = 4
