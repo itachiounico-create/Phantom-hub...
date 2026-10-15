@@ -189,35 +189,65 @@ local window = create("Frame", {
 round(window, 14)
 outline(window, COLORS.Purple, 1.5)
 
--- CABEÇALHO
+
+-- CABEÇALHO PHANTOM V2 | VISUAL REFINADO
+
 local header = create("Frame", {
     Name = "Header",
     Size = UDim2.new(1, 0, 0, 43),
-    BackgroundColor3 = COLORS.Panel,
+    BackgroundColor3 = Color3.fromRGB(24, 21, 36),
     BorderSizePixel = 0
 }, window)
 
-makeLabel(
+-- Linha neon inferior
+local headerLine = create("Frame", {
+    Name = "HeaderLine",
+    Position = UDim2.new(0, 12, 1, -1),
+    Size = UDim2.new(1, -24, 0, 1),
+    BackgroundColor3 = COLORS.Purple,
+    BackgroundTransparency = 0.2,
+    BorderSizePixel = 0
+}, header)
+
+-- Nome do projeto
+local titleLabel = makeLabel(
     header,
     "◈  PHANTOM",
     UDim2.fromOffset(13, 0),
-    UDim2.new(1, -60, 1, 0),
+    UDim2.new(1, -90, 1, 0),
     COLORS.White,
     16
-).Font = Enum.Font.GothamBold
+)
 
+titleLabel.Font = Enum.Font.GothamBold
+
+-- Pequeno subtítulo
+local subtitle = makeLabel(
+    header,
+    "V2  •  INTERFACE",
+    UDim2.fromOffset(108, 4),
+    UDim2.new(1, -155, 0, 34),
+    Color3.fromRGB(177, 151, 220),
+    8
+)
+
+subtitle.TextXAlignment = Enum.TextXAlignment.Left
+
+-- Botão fechar
 local closeButton = create("TextButton", {
     Name = "CloseButton",
     Position = UDim2.new(1, -37, 0, 7),
     Size = UDim2.fromOffset(28, 28),
-    BackgroundColor3 = COLORS.Element,
+    BackgroundColor3 = Color3.fromRGB(48, 32, 61),
     Text = "×",
-    TextColor3 = COLORS.White,
+    TextColor3 = Color3.fromRGB(225, 204, 255),
     TextSize = 20,
-    Font = Enum.Font.GothamBold
+    Font = Enum.Font.GothamBold,
+    AutoButtonColor = true
 }, header)
 
 round(closeButton, 8)
+outline(closeButton, COLORS.Purple, 1)
 
 -- BARRA LATERAL
 local sidebar = create("Frame", {
