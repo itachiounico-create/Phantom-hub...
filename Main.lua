@@ -211,7 +211,8 @@ round(window, 14)
 
 round(contentMask, 13)
 -- CONTORNO NEON ANIMADO
-local windowStroke = outline(window, COLORS.Purple, 2)
+local windowStroke = outline(window, Color3.fromRGB(170, 85, 255), 3.5)
+windowStroke.Transparency = 0
 
 local borderGradient = create("UIGradient", {
     Color = ColorSequence.new({
