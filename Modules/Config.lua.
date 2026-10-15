@@ -1,0 +1,21 @@
+
+local Config = {}
+
+Config.Name = "PHANTOM"
+Config.Version = "0.1.0"
+
+Config.Theme = {
+    Background = Color3.fromRGB(15, 13, 22),
+    Secondary = Color3.fromRGB(25, 22, 35),
+    Accent = Color3.fromRGB(155, 90, 255),
+    Text = Color3.fromRGB(255, 255, 255),
+    Muted = Color3.fromRGB(165, 160, 180),
+}
+
+Config.Window = {
+    Width = 320,
+    Height = 300,
+    SidebarWidth = 88,
+}
+
+return Config
