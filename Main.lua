@@ -84,16 +84,30 @@ local function card(parent, name, position, size)
         BorderSizePixel = 0
     }, parent)
 
-    round(frame, 10)
+    
+round(frame, 10)
 
-    local stroke = outline(
-        frame,
-        Color3.fromRGB(91, 65, 133),
-        1
-    )
-    stroke.Transparency = 0.38
+local stroke = outline(
+    frame,
+    Color3.fromRGB(91, 65, 133),
+    1
+)
+stroke.Transparency = 0.38
 
-    return frame
+-- MARCADOR CYBER
+local accent = create("Frame", {
+    Name = "CyberAccent",
+    Position = UDim2.fromOffset(0, 10),
+    Size = UDim2.fromOffset(3, 20),
+    BackgroundColor3 = COLORS.PurpleLight,
+    BorderSizePixel = 0,
+    ZIndex = 3
+}, frame)
+
+round(accent, 2)
+
+return frame
+
 end
 
 
@@ -387,6 +401,17 @@ home,
 UDim2.fromOffset(0, 31),
 UDim2.new(1, 0, 0, 65)
 )
+
+local welcomeDivider = create("Frame", {
+    Name = "WelcomeDivider",
+    Position = UDim2.new(0, 10, 0, 31),
+    Size = UDim2.new(1, -20, 0, 1),
+    BackgroundColor3 = Color3.fromRGB(76, 54, 103),
+    BackgroundTransparency = 0.25,
+    BorderSizePixel = 0,
+    ZIndex = 3
+}, welcome)
+
 
 label(
 welcome,
