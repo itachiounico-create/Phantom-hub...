@@ -209,17 +209,6 @@ ZIndex = 1
 
 round(window, 14)
 
--- MASCARA ARREDONDADA DO CONTEUDO
-local contentMask = create("Frame", {
-    Name = "ContentMask",
-    Position = UDim2.fromOffset(1, 1),
-    Size = UDim2.new(1, -2, 1, -2),
-    BackgroundTransparency = 1,
-    BorderSizePixel = 0,
-    ClipsDescendants = true,
-    ZIndex = 0
-}, window)
-
 round(contentMask, 13)
 -- CONTORNO NEON ANIMADO
 local windowStroke = outline(window, COLORS.Purple, 2)
@@ -287,6 +276,15 @@ BackgroundColor3 = Color3.fromRGB(48, 32, 70),
 BorderSizePixel = 0,
 ZIndex = 2
 }, window)
+round(header, 14)
+create("Frame", {
+    Name = "HeaderBottomFill",
+    Position = UDim2.new(0, 0, 0, 14),
+    Size = UDim2.new(1, 0, 0, 32),
+    BackgroundColor3 = Color3.fromRGB(48, 32, 70),
+    BorderSizePixel = 0,
+    ZIndex = 2
+}, header)
 
 
 local titleLabel = label(
@@ -347,6 +345,24 @@ BackgroundColor3 = COLORS.Panel,
 BorderSizePixel = 0,
 ZIndex = 2
 }, window)
+round(sidebar, 14)
+create("Frame", {
+    Name = "SidebarTopFill",
+    Position = UDim2.new(0, 0, 0, 0),
+    Size = UDim2.new(1, 0, 0, 14),
+    BackgroundColor3 = COLORS.Panel,
+    BorderSizePixel = 0,
+    ZIndex = 2
+}, sidebar)
+
+create("Frame", {
+    Name = "SidebarRightFill",
+    Position = UDim2.new(1, -14, 0, 0),
+    Size = UDim2.new(0, 14, 1, 0),
+    BackgroundColor3 = COLORS.Panel,
+    BorderSizePixel = 0,
+    ZIndex = 2
+}, sidebar)
 
 -- DIVISORIA CYBER
 local sidebarDivider = create("Frame", {
