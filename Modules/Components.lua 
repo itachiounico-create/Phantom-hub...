@@ -1,0 +1,35 @@
+
+-- PHANTOM
+-- Components.lua
+
+local Components = {}
+
+function Components.CreateToggle(defaultValue)
+    local Toggle = {
+        Value = defaultValue == true,
+    }
+
+    function Toggle:Set(value)
+        self.Value = value == true
+        return self.Value
+    end
+
+    function Toggle:Get()
+        return self.Value
+    end
+
+    function Toggle:Toggle()
+        self.Value = not self.Value
+        return self.Value
+    end
+
+    return Toggle
+end
+
+function Components.CreateButton(callback)
+    return {
+        Callback = callback,
+    }
+end
+
+return Components
