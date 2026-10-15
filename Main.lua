@@ -92,50 +92,86 @@ local openButton = create("ImageButton", {
 round(openButton, 16)
 outline(openButton, COLORS.Purple, 2)
 
--- Símbolo de máscara fantasma feito com elementos nativos
+
+-- MÁSCARA PHANTOM CYBER | NEON ROXO
+
+-- Halo neon por trás da máscara
+local halo = create("Frame", {
+    Name = "PhantomHalo",
+    AnchorPoint = Vector2.new(0.5, 0.5),
+    Position = UDim2.fromScale(0.5, 0.48),
+    Size = UDim2.fromOffset(36, 38),
+    BackgroundColor3 = COLORS.Purple,
+    BackgroundTransparency = 0.52,
+    BorderSizePixel = 0,
+    ZIndex = 1
+}, openButton)
+
+round(halo, 13)
+
+-- Máscara principal
 local mask = create("Frame", {
     Name = "PhantomMask",
     AnchorPoint = Vector2.new(0.5, 0.5),
-    Position = UDim2.fromScale(0.5, 0.48),
+    Position = UDim2.fromScale(0.5, 0.47),
     Size = UDim2.fromOffset(27, 29),
-    BackgroundColor3 = COLORS.White,
-    BorderSizePixel = 0
+    BackgroundColor3 = Color3.fromRGB(242, 238, 255),
+    BorderSizePixel = 0,
+    ZIndex = 2
 }, openButton)
 
-round(mask, 12)
+round(mask, 10)
+outline(mask, Color3.fromRGB(190, 135, 255), 1.5)
 
--- Base inferior irregular da máscara
+-- Parte inferior estilizada
 local maskBase = create("Frame", {
     Name = "MaskBase",
-    Position = UDim2.new(0, 2, 1, -9),
-    Size = UDim2.new(1, -4, 0, 8),
-    BackgroundColor3 = COLORS.White,
-    BorderSizePixel = 0
+    Position = UDim2.new(0, 2, 1, -8),
+    Size = UDim2.new(1, -4, 0, 7),
+    BackgroundColor3 = Color3.fromRGB(242, 238, 255),
+    BorderSizePixel = 0,
+    ZIndex = 2
 }, mask)
 
 round(maskBase, 3)
 
--- Olhos roxos
-for _, x in ipairs({6, 17}) do
-    local eye = create("Frame", {
-        Position = UDim2.fromOffset(x, 10),
-        Size = UDim2.fromOffset(5, 7),
+-- Olhos arredondados com fundo neon
+for _, x in ipairs({5, 17}) do
+    local eyeGlow = create("Frame", {
+        Position = UDim2.fromOffset(x - 2, 9),
+        Size = UDim2.fromOffset(9, 11),
         BackgroundColor3 = COLORS.Purple,
-        BorderSizePixel = 0
+        BackgroundTransparency = 0.2,
+        BorderSizePixel = 0,
+        ZIndex = 3
     }, mask)
 
-    round(eye, 3)
+    round(eyeGlow, 6)
+
+    local eye = create("Frame", {
+        Position = UDim2.fromOffset(x, 11),
+        Size = UDim2.fromOffset(5, 7),
+        BackgroundColor3 = Color3.fromRGB(35, 12, 65),
+        BorderSizePixel = 0,
+        ZIndex = 4
+    }, mask)
+
+    round(eye, 4)
 end
 
--- Pequena boca
+-- Boca pequena e misteriosa
 local mouth = create("Frame", {
-    Position = UDim2.fromOffset(11, 21),
-    Size = UDim2.fromOffset(5, 3),
+    Name = "MaskMouth",
+    AnchorPoint = Vector2.new(0.5, 0),
+    Position = UDim2.new(0.5, 0, 0, 22),
+    Size = UDim2.fromOffset(6, 3),
     BackgroundColor3 = COLORS.Purple,
-    BorderSizePixel = 0
+    BorderSizePixel = 0,
+    ZIndex = 4
 }, mask)
 
-round(mouth, 2)
+round(mouth, 3)
+
 
 
 -- JANELA
