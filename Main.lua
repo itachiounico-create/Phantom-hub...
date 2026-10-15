@@ -126,7 +126,7 @@ ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
 local openButton = create("ImageButton", {
 Name = "OpenButton",
-Size = UDim2.fromOffset(50, 50),
+Size = UDim2.fromOffset(35, 35),
 Position = UDim2.new(0, 18, 0.5, -25),
 BackgroundColor3 = COLORS.Background,
 Image = "",
