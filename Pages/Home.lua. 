@@ -1,0 +1,24 @@
+
+-- PHANTOM
+-- Pages/Home.lua
+
+local Home = {}
+
+Home.Title = "Principal"
+
+Home.Description = "Bem-vindo ao PHANTOM."
+
+Home.Items = {
+    "Informacoes",
+    "Status",
+}
+
+function Home:GetInfo()
+    return {
+        Title = self.Title,
+        Description = self.Description,
+        Items = self.Items,
+    }
+end
+
+return Home
