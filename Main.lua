@@ -211,7 +211,12 @@ round(window, 14)
 
 round(contentMask, 13)
 -- CONTORNO NEON ANIMADO
-local windowStroke = outline(window, Color3.fromRGB(170, 85, 255), 3.5)
+local windowStroke = outline(
+    window,
+    Color3.fromRGB(190, 110, 255),
+    3.5
+)
+
 windowStroke.Transparency = 0
 
 local borderGradient = create("UIGradient", {
@@ -243,7 +248,7 @@ local borderGradient = create("UIGradient", {
 local borderAnimation = TweenService:Create(
     borderGradient,
     TweenInfo.new(
-        3.5,
+        10,
         Enum.EasingStyle.Linear,
         Enum.EasingDirection.InOut,
         -1,
