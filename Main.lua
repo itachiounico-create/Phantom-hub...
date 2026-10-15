@@ -226,7 +226,7 @@ round(topAccent, 2)
 local header = create("Frame", {
 Name = "Header",
 Size = UDim2.new(1, 0, 0, 46),
-BackgroundColor3 = Color3.fromRGB(29, 23, 45),
+BackgroundColor3 = Color3.fromRGB(48, 32, 70),
 BorderSizePixel = 0,
 ZIndex = 2
 }, window)
