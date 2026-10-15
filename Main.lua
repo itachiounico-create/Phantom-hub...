@@ -8,6 +8,7 @@
 
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
+local TweenService = game:GetService("TweenService")
 
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
@@ -207,7 +208,51 @@ ZIndex = 1
 }, gui)
 
 round(window, 14)
-outline(window, COLORS.Purple, 1.5)
+
+-- CONTORNO NEON ANIMADO
+local windowStroke = outline(window, COLORS.Purple, 2)
+
+local borderGradient = create("UIGradient", {
+    Color = ColorSequence.new({
+        ColorSequenceKeypoint.new(
+            0,
+            Color3.fromRGB(65, 30, 110)
+        ),
+        ColorSequenceKeypoint.new(
+            0.42,
+            Color3.fromRGB(157, 91, 255)
+        ),
+        ColorSequenceKeypoint.new(
+            0.5,
+            Color3.fromRGB(245, 225, 255)
+        ),
+        ColorSequenceKeypoint.new(
+            0.58,
+            Color3.fromRGB(157, 91, 255)
+        ),
+        ColorSequenceKeypoint.new(
+            1,
+            Color3.fromRGB(65, 30, 110)
+        )
+    }),
+    Rotation = 0
+}, windowStroke)
+
+local borderAnimation = TweenService:Create(
+    borderGradient,
+    TweenInfo.new(
+        3.5,
+        Enum.EasingStyle.Linear,
+        Enum.EasingDirection.InOut,
+        -1,
+        false
+    ),
+    {
+        Rotation = 360
+    }
+)
+
+borderAnimation:Play()
 
 -- ACENTO CYBER SUPERIOR
 local topAccent = create("Frame", {
