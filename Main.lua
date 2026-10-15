@@ -209,6 +209,18 @@ ZIndex = 1
 
 round(window, 14)
 
+-- MASCARA ARREDONDADA DO CONTEUDO
+local contentMask = create("Frame", {
+    Name = "ContentMask",
+    Position = UDim2.fromOffset(1, 1),
+    Size = UDim2.new(1, -2, 1, -2),
+    BackgroundTransparency = 1,
+    BorderSizePixel = 0,
+    ClipsDescendants = true,
+    ZIndex = 0
+}, window)
+
+round(contentMask, 13)
 -- CONTORNO NEON ANIMADO
 local windowStroke = outline(window, COLORS.Purple, 2)
 
