@@ -1071,10 +1071,10 @@ local function updateThemeLayout()
     end
 
     if saveThemeButton and resetThemeButton then
-    saveThemeButton.Position = UDim2.fromOffset(0, y + 2)
-    resetThemeButton.Position = UDim2.fromOffset(0, y + 29)
+    saveThemeButton.Position = UDim2.new(0, 0, 0, y + 2)
+    resetThemeButton.Position = UDim2.new(0.5, 3, 0, y + 2)
 
-    themeScroll.CanvasSize = UDim2.fromOffset(0, y + 56)
+    themeScroll.CanvasSize = UDim2.fromOffset(0, y + 31)
 else
     themeScroll.CanvasSize = UDim2.fromOffset(0, y + 2)
     end
