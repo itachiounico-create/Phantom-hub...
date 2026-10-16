@@ -1358,7 +1358,7 @@ local sizePanel = create("Frame", {
 local sizeTitle = label(
     sizePanel,
     "TAMANHO DO MENU",
-    UDim2.fromOffset(0, 4),
+    UDim2.fromOffset(0, 0),
     UDim2.new(1, 0, 0, 22),
     COLORS.PurpleLight,
     12,
@@ -1368,7 +1368,7 @@ local sizeTitle = label(
 local sizeValue = label(
     sizePanel,
     "100%",
-    UDim2.fromOffset(0, 43),
+    UDim2.fromOffset(0, 20),
     UDim2.new(1, 0, 0, 25),
     COLORS.White,
     18,
@@ -1378,7 +1378,7 @@ local sizeValue = label(
 local sizeTrack = create("Frame", {
     Name = "SizeTrack",
     Position = UDim2.new(0, 12, 0, 84),
-    Size = UDim2.new(1, -24, 0, 6),
+    Size = UDim2.new(0, 12, 0, 53),
     BackgroundColor3 = COLORS.Element,
     BorderSizePixel = 0,
     ZIndex = 4
@@ -1412,7 +1412,7 @@ round(sizeKnob, 9)
 
 local sizeSaveButton = create("TextButton", {
     Name = "SaveWindowSizeButton",
-    Position = UDim2.fromOffset(0, 112),
+    Position = UDim2.fromOffset(0, 65),
     Size = UDim2.new(1, 0, 0, 26),
     BackgroundColor3 = Color3.fromRGB(65, 45, 80),
     Text = "SALVAR TAMANHO",
