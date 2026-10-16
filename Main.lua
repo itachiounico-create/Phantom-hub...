@@ -678,11 +678,11 @@ local Stats = game:GetService("Stats")
 
 local counters = create("Frame", {
     Name = "PerformanceCounters",
-    Position = UDim2.fromOffset(0, 27),
+    Position = UDim2.fromOffset(0, 0),
     Size = UDim2.new(1, 0, 0, 42),
     BackgroundTransparency = 1,
     BorderSizePixel = 0
-}, home)
+}, homeScroll)
 
 local function createCounter(name, color, position, width)
     local item = create("Frame", {
