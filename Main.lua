@@ -646,6 +646,21 @@ createTab("Ajustes", "⚙  Ajustes", 77)
 
 local home = createPage("Principal")
 
+local homeScroll = create("ScrollingFrame", {
+    Name = "HomeScroll",
+    Position = UDim2.fromOffset(0, 28),
+    Size = UDim2.new(1, 0, 1, -28),
+    BackgroundTransparency = 1,
+    BorderSizePixel = 0,
+    ScrollBarThickness = 3,
+    ScrollBarImageColor3 = COLORS.Purple,
+    ScrollingDirection = Enum.ScrollingDirection.Y,
+    AutomaticCanvasSize = Enum.AutomaticSize.Y,
+    CanvasSize = UDim2.new(0, 0, 0, 0),
+    Active = true,
+    ZIndex = 3
+}, home)
+
 label(
 home,
 "PAINEL PRINCIPAL",
