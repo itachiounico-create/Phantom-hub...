@@ -9,6 +9,7 @@
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
+local HttpService = game:GetService("HttpService")
 
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
@@ -32,6 +33,130 @@ Gray = Color3.fromRGB(155, 151, 176),
 Green = Color3.fromRGB(103, 230, 166),
 Red = Color3.fromRGB(255, 105, 125)
 }
+
+--==================================================
+-- PHANTOM V3 | CORES PERSONALIZAVEIS
+-- Persistencia local
+--==================================================
+
+local THEME_FILE = "PhantomV3_Main_Colors.json"
+
+local THEME_PALETTE = {
+    Vermelho = Color3.fromRGB(239, 68, 68),
+    Preto = Color3.fromRGB(8, 8, 8),
+    Roxo = Color3.fromRGB(168, 85, 247),
+    Branco = Color3.fromRGB(245, 245, 245)
+}
+
+-- Padroes do sistema de personalizacao
+local THEME_DEFAULTS = {
+    Barra = "Roxo",
+    Area = "Preto",
+    Neon = "Roxo",
+    Linha = "Roxo"
+}
+
+local themeSelected = {}
+
+for key, value in pairs(THEME_DEFAULTS) do
+    themeSelected[key] = value
+end
+
+local function validTheme(data)
+    if type(data) ~= "table" then
+        return false
+    end
+
+    for key in pairs(THEME_DEFAULTS) do
+        if type(data[key]) ~= "string"
+            or THEME_PALETTE[data[key]] == nil then
+            return false
+        end
+    end
+
+    return true
+end
+
+local function loadTheme()
+    if type(isfile) ~= "function"
+        or type(readfile) ~= "function" then
+        return false
+    end
+
+    local existsOK, exists = pcall(isfile, THEME_FILE)
+
+    if not existsOK or not exists then
+        return false
+    end
+
+    local readOK, contents = pcall(readfile, THEME_FILE)
+
+    if not readOK or type(contents) ~= "string" then
+        return false
+    end
+
+    local decodeOK, data = pcall(function()
+        return HttpService:JSONDecode(contents)
+    end)
+
+    if not decodeOK or not validTheme(data) then
+        return false
+    end
+
+    for key in pairs(THEME_DEFAULTS) do
+        themeSelected[key] = data[key]
+    end
+
+    return true
+end
+
+local function saveTheme()
+    if type(writefile) ~= "function" then
+        return false, "Gravacao indisponivel"
+    end
+
+    local encodedOK, contents = pcall(function()
+        return HttpService:JSONEncode(themeSelected)
+    end)
+
+    if not encodedOK then
+        return false, "Erro ao preparar as cores"
+    end
+
+    local writeOK = pcall(writefile, THEME_FILE, contents)
+
+    if not writeOK then
+        return false, "Erro ao salvar o arquivo"
+    end
+
+    -- Verificar a gravacao quando a leitura estiver disponivel
+    if type(readfile) == "function" then
+        local readOK, saved = pcall(readfile, THEME_FILE)
+
+        if not readOK or type(saved) ~= "string" then
+            return false, "Nao foi possivel confirmar o arquivo"
+        end
+
+        local decodeOK, data = pcall(function()
+            return HttpService:JSONDecode(saved)
+        end)
+
+        if not decodeOK or not validTheme(data) then
+            return false, "Arquivo salvo, mas nao validado"
+        end
+
+        for key in pairs(THEME_DEFAULTS) do
+            if data[key] ~= themeSelected[key] then
+                return false, "As cores gravadas nao conferem"
+            end
+        end
+    end
+
+    return true, "Cores salvas!"
+end
+
+local themeWasLoaded = loadTheme()
+
 
 -- FUNCOES DE CONSTRUCAO
 local function create(className, properties, parent)
@@ -447,7 +572,8 @@ local pageHost = create("Frame", {
 Name = "PageHost",
 Position = UDim2.fromOffset(104, 56),
 Size = UDim2.new(1, -114, 1, -66),
-BackgroundTransparency = 1,
+BackgroundColor3 = COLORS.Background,
+BackgroundTransparency = 0,
 ClipsDescendants = true,
 ZIndex = 2
 }, window)
@@ -740,79 +866,384 @@ COLORS.PurpleLight,
 true
 )
 
-local appearanceCard = card(
-settings,
-"AppearanceCard",
-UDim2.fromOffset(0, 31),
-UDim2.new(1, 0, 0, 76)
-)
 
-label(
-appearanceCard,
-"APARENCIA",
-UDim2.fromOffset(10, 7),
-UDim2.new(1, -20, 0, 18),
-COLORS.White,
-11,
-true
-)
+--==================================================
+-- PHANTOM V3 | PERSONALIZACAO DO TEMA
+-- Dentro da pagina AJUSTES
+--==================================================
 
-label(
-appearanceCard,
-"Tema escuro / roxo neon",
-UDim2.fromOffset(10, 32),
-UDim2.new(1, -20, 0, 19),
-COLORS.Gray,
-9,
-false
-)
+local themeScroll = create("ScrollingFrame", {
+    Name = "ThemeColorScroll",
+    Position = UDim2.fromOffset(0, 28),
+    Size = UDim2.new(1, 0, 1, -91),
+    BackgroundTransparency = 1,
+    BorderSizePixel = 0,
+    ScrollBarThickness = 3,
+    ScrollBarImageColor3 = COLORS.Purple,
+    ScrollingDirection = Enum.ScrollingDirection.Y,
+    AutomaticCanvasSize = Enum.AutomaticSize.None,
+    CanvasSize = UDim2.fromOffset(0, 0),
+    Active = true,
+    ZIndex = 3
+}, settings)
 
-local versionCard = card(
-settings,
-"VersionCard",
-UDim2.fromOffset(0, 117),
-UDim2.new(1, 0, 0, 76)
+local themeStatus = label(
+    settings,
+    "",
+    UDim2.new(0, 0, 1, -48),
+    UDim2.new(1, 0, 0, 14),
+    COLORS.Gray,
+    8,
+    false
 )
+themeStatus.TextXAlignment = Enum.TextXAlignment.Center
 
-label(
-versionCard,
-"INFORMACOES",
-UDim2.fromOffset(10, 7),
-UDim2.new(1, -20, 0, 18),
-COLORS.White,
-11,
-true
-)
+local themeSections = {}
+local expandedThemeKey = nil
 
-label(
-versionCard,
-"PHANTOM V3.0",
-UDim2.fromOffset(10, 31),
-UDim2.new(1, -20, 0, 18),
-COLORS.PurpleLight,
-11,
-true
-)
+local themeDefinitions = {
+    {key = "Barra", title = "BARRA LATERAL"},
+    {key = "Area", title = "AREA DAS PAGINAS"},
+    {key = "Neon", title = "ILUMINACAO NEON"},
+    {key = "Linha", title = "COR DA LINHA"}
+}
 
-label(
-versionCard,
-"Interface visual para celular",
-UDim2.fromOffset(10, 51),
-UDim2.new(1, -20, 0, 17),
-COLORS.Gray,
-9,
-false
-)
+-- Aplicar uma cor em cada parte do menu
+local function applyThemeColor(key, color)
+    if key == "Barra" then
+        sidebar.BackgroundColor3 = color
 
-label(
-settings,
-"As opcoes serao configuradas depois.",
-UDim2.fromOffset(0, 207),
-UDim2.new(1, 0, 0, 30),
-COLORS.Gray,
-9,
-false
-)
+        local topFill = sidebar:FindFirstChild("SidebarTopFill")
+        local rightFill = sidebar:FindFirstChild("SidebarRightFill")
+
+        if topFill then
+            topFill.BackgroundColor3 = color
+        end
+
+        if rightFill then
+            rightFill.BackgroundColor3 = color
+        end
+
+    elseif key == "Area" then
+        pageHost.BackgroundColor3 = color
+        pageHost.BackgroundTransparency = 0
+
+    elseif key == "Neon" then
+        windowStroke.Color = color
+        borderGradient.Color = ColorSequence.new(color)
+        topAccent.BackgroundColor3 = color
+        themeScroll.ScrollBarImageColor3 = color
+
+        for _, tab in pairs(tabs) do
+            tab.Indicator.BackgroundColor3 = color
+        end
+
+    elseif key == "Linha" then
+        headerLine.BackgroundColor3 = color
+        sidebarDivider.BackgroundColor3 = color
+    end
+end
+
+local function applyAllThemeColors()
+    for key, colorName in pairs(themeSelected) do
+        applyThemeColor(key, THEME_PALETTE[colorName])
+
+        local section = themeSections[key]
+        if section then
+            section.refresh()
+        end
+    end
+end
+
+local function updateThemeLayout()
+    local y = 0
+
+    for _, def in ipairs(themeDefinitions) do
+        local section = themeSections[def.key]
+        local isOpen = expandedThemeKey == def.key
+
+        section.holder.Position = UDim2.fromOffset(0, y)
+
+        local height = isOpen and 145 or 39
+        section.holder.Size = UDim2.new(1, -2, 0, height)
+        section.options.Visible = isOpen
+        section.arrow.Text = isOpen and "-" or "+"
+
+        y = y + height + 5
+    end
+
+    themeScroll.CanvasSize = UDim2.fromOffset(0, y + 2)
+end
+
+local function makeThemeSection(def)
+    local holder = create("Frame", {
+        Name = def.key .. "ColorSection",
+        Position = UDim2.fromOffset(0, 0),
+        Size = UDim2.new(1, -2, 0, 39),
+        BackgroundTransparency = 1,
+        BorderSizePixel = 0,
+        ZIndex = 3
+    }, themeScroll)
+
+    local head = create("TextButton", {
+        Name = "SectionHeader",
+        Size = UDim2.new(1, 0, 0, 35),
+        BackgroundColor3 = COLORS.Element,
+        Text = "",
+        BorderSizePixel = 0,
+        AutoButtonColor = false,
+        ZIndex = 3
+    }, holder)
+
+    round(head, 7)
+    outline(head, COLORS.Purple, 1)
+
+    label(
+        head,
+        def.title,
+        UDim2.fromOffset(8, 1),
+        UDim2.new(1, -63, 0, 16),
+        COLORS.White,
+        9,
+        true
+    ).ZIndex = 4
+
+    local current = label(
+        head,
+        "Atual: " .. themeSelected[def.key],
+        UDim2.fromOffset(8, 17),
+        UDim2.new(1, -63, 0, 14),
+        COLORS.Gray,
+        8,
+        false
+    )
+    current.ZIndex = 4
+
+    local swatch = create("Frame", {
+        Name = "CurrentSwatch",
+        Position = UDim2.new(1, -43, 0, 9),
+        Size = UDim2.fromOffset(16, 16),
+        BackgroundColor3 = THEME_PALETTE[themeSelected[def.key]],
+        BorderSizePixel = 0,
+        ZIndex = 4
+    }, head)
+
+    round(swatch, 4)
+    outline(swatch, COLORS.PurpleLight, 1)
+
+    local arrow = label(
+        head,
+        "+",
+        UDim2.new(1, -24, 0, 0),
+        UDim2.fromOffset(20, 35),
+        COLORS.PurpleLight,
+        15,
+        true
+    )
+    arrow.Parent = head
+    arrow.ZIndex = 4
+    arrow.TextXAlignment = Enum.TextXAlignment.Center
+
+    local options = create("Frame", {
+        Name = "ColorOptions",
+        Position = UDim2.fromOffset(0, 39),
+        Size = UDim2.new(1, 0, 0, 104),
+        BackgroundColor3 = COLORS.Background,
+        BorderSizePixel = 0,
+        Visible = false,
+        ZIndex = 3
+    }, holder)
+
+    round(options, 6)
+
+    local entries = {}
+
+    local function readableThemeText(color)
+        local brightness =
+            color.R * 0.299 +
+            color.G * 0.587 +
+            color.B * 0.114
+
+        if brightness > 0.58 then
+            return Color3.fromRGB(18, 16, 23)
+        end
+
+        return COLORS.White
+    end
+
+    for i, colorName in ipairs({
+        "Vermelho", "Preto", "Roxo", "Branco"
+    }) do
+        local button = create("TextButton", {
+            Name = colorName .. "Option",
+            Position = UDim2.fromOffset(4, 3 + (i - 1) * 25),
+            Size = UDim2.new(1, -8, 0, 22),
+            BackgroundColor3 = COLORS.Element,
+            Text = "",
+            BorderSizePixel = 0,
+            AutoButtonColor = true,
+            ZIndex = 4
+        }, options)
+
+        round(button, 4)
+
+        local swatchOption = create("Frame", {
+            Position = UDim2.fromOffset(5, 3),
+            Size = UDim2.fromOffset(16, 16),
+            BackgroundColor3 = THEME_PALETTE[colorName],
+            BorderSizePixel = 0,
+            ZIndex = 5
+        }, button)
+
+        round(swatchOption, 3)
+
+        label(
+            button,
+            colorName,
+            UDim2.fromOffset(27, 0),
+            UDim2.new(1, -70, 1, 0),
+            readableThemeText(THEME_PALETTE[colorName]),
+            9,
+            false
+        ).ZIndex = 5
+
+        local status = label(
+            button,
+            "",
+            UDim2.new(1, -43, 0, 0),
+            UDim2.fromOffset(38, 22),
+            COLORS.PurpleLight,
+            8,
+            true
+        )
+        status.TextXAlignment = Enum.TextXAlignment.Right
+        status.ZIndex = 5
+
+        entries[colorName] = {
+            button = button,
+            status = status
+        }
+
+        button.Activated:Connect(function()
+            themeSelected[def.key] = colorName
+
+            applyThemeColor(
+                def.key,
+                THEME_PALETTE[colorName]
+            )
+
+            for _, section in pairs(themeSections) do
+                section.refresh()
+            end
+
+            themeStatus.Text = "Alteracao ainda nao salva."
+            themeStatus.TextColor3 = COLORS.Gray
+        end)
+    end
+
+    local section = {
+        holder = holder,
+        options = options,
+        arrow = arrow,
+        current = current,
+        swatch = swatch
+    }
+
+    function section.refresh()
+        local chosen = themeSelected[def.key]
+
+        current.Text = "Atual: " .. chosen
+        swatch.BackgroundColor3 = THEME_PALETTE[chosen]
+
+        for colorName, entry in pairs(entries) do
+            local active = colorName == chosen
+
+            entry.status.Text = active and "ATIVO" or ""
+            entry.button.BackgroundColor3 = active
+                and Color3.fromRGB(65, 45, 80)
+                or COLORS.Element
+        end
+    end
+
+    themeSections[def.key] = section
+
+    head.Activated:Connect(function()
+        if expandedThemeKey == def.key then
+            expandedThemeKey = nil
+        else
+            expandedThemeKey = def.key
+        end
+
+        updateThemeLayout()
+    end)
+
+    section.refresh()
+end
+
+for _, def in ipairs(themeDefinitions) do
+    makeThemeSection(def)
+end
+
+-- Botao salvar
+local saveThemeButton = create("TextButton", {
+    Name = "SaveThemeButton",
+    Position = UDim2.new(0, 0, 1, -31),
+    Size = UDim2.new(0.5, -4, 0, 27),
+    BackgroundColor3 = Color3.fromRGB(65, 45, 80),
+    Text = "SALVAR CORES",
+    TextColor3 = COLORS.White,
+    Font = Enum.Font.GothamBold,
+    TextSize = 9,
+    BorderSizePixel = 0,
+    ZIndex = 4
+}, settings)
+
+round(saveThemeButton, 6)
+
+-- Botao resetar
+local resetThemeButton = create("TextButton", {
+    Name = "ResetThemeButton",
+    Position = UDim2.new(0.5, 4, 1, -31),
+    Size = UDim2.new(0.5, -4, 0, 27),
+    BackgroundColor3 = COLORS.Element,
+    Text = "RESETAR CORES",
+    TextColor3 = COLORS.White,
+    Font = Enum.Font.GothamBold,
+    TextSize = 9,
+    BorderSizePixel = 0,
+    ZIndex = 4
+}, settings)
+
+round(resetThemeButton, 6)
+
+saveThemeButton.Activated:Connect(function()
+    local success, result = saveTheme()
+
+    themeStatus.Text = result
+    themeStatus.TextColor3 = success
+        and COLORS.Green
+        or COLORS.Red
+end)
+
+resetThemeButton.Activated:Connect(function()
+    for key, colorName in pairs(THEME_DEFAULTS) do
+        themeSelected[key] = colorName
+    end
+
+    applyAllThemeColors()
+
+    themeStatus.Text = "Padrao restaurado. Salve para manter."
+    themeStatus.TextColor3 = COLORS.Gray
+end)
+
+-- Aplicar as cores carregadas ao iniciar
+applyAllThemeColors()
+updateThemeLayout()
+
+themeStatus.Text = themeWasLoaded
+    and "Ultimas cores salvas carregadas."
+    or "Tema padrao carregado."
+
 
 --==================================================
 -- CONTROLE DE ABERTURA
