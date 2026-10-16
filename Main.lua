@@ -929,8 +929,8 @@ local function applyThemeColor(key, color)
         pageHost.BackgroundTransparency = 0
 
     elseif key == "Neon" then
-    local dark = color:Lerp(Color3.new(0, 0, 0), 0.65)
-    local bright = color:Lerp(Color3.new(1, 1, 1), 0.45)
+    local dark = color:Lerp(Color3.new(0, 0, 0), 0.35)
+local bright = color:Lerp(Color3.new(1, 1, 1), 0.15)
 
     windowStroke.Color = color
 
