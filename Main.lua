@@ -530,10 +530,102 @@ COLORS.PurpleLight,
 true
 )
 
+-- CONTADORES: FPS / PING / JOGADORES
+local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
+local Stats = game:GetService("Stats")
+
+local counters = create("Frame", {
+    Name = "PerformanceCounters",
+    Position = UDim2.fromOffset(0, 27),
+    Size = UDim2.new(1, 0, 0, 42),
+    BackgroundTransparency = 1,
+    BorderSizePixel = 0
+}, home)
+
+local function createCounter(name, color, position, width)
+    local item = create("Frame", {
+        Name = name .. "Card",
+        Position = UDim2.new(0, position, 0, 0),
+        Size = UDim2.new(0, width, 1, 0),
+        BackgroundColor3 = Color3.fromRGB(30, 25, 42),
+        BorderSizePixel = 0
+    }, counters)
+
+    create("UICorner", {
+        CornerRadius = UDim.new(0, 6)
+    }, item)
+
+    local text = create("TextLabel", {
+        Name = name .. "Text",
+        Size = UDim2.new(1, -4, 1, 0),
+        Position = UDim2.fromOffset(2, 0),
+        BackgroundTransparency = 1,
+        Text = name .. ": --",
+        TextColor3 = color,
+        Font = Enum.Font.GothamSemibold,
+        TextSize = 10,
+        TextScaled = false,
+        BorderSizePixel = 0
+    }, item)
+
+    return text
+end
+
+local fpsLabel = createCounter(
+    "FPS", COLORS.PurpleLight, 0, 52
+)
+
+local pingLabel = createCounter(
+    "PING", Color3.fromRGB(85, 216, 255), 56, 58
+)
+
+local playersLabel = createCounter(
+    "JOGADORES", Color3.fromRGB(107, 231, 160), 118, 82
+)
+
+-- Atualização periódica dos valores
+local elapsed = 0
+local frames = 0
+local currentFPS = 0
+
+local function readPing()
+    local success, value = pcall(function()
+        return Stats.Network.ServerStatsItem["Data Ping"]:GetValue()
+    end)
+
+    if success and type(value) == "number" then
+        return math.floor(value + 0.5)
+    end
+
+    return nil
+end
+
+RunService.RenderStepped:Connect(function(dt)
+    frames = frames + 1
+    elapsed = elapsed + dt
+
+    if elapsed >= 1 then
+        currentFPS = math.floor(frames / elapsed + 0.5)
+        frames = 0
+        elapsed = 0
+
+        fpsLabel.Text = "FPS: " .. currentFPS
+
+        local ping = readPing()
+        pingLabel.Text = ping
+            and ("PING: " .. ping .. "ms")
+            or "PING: --"
+
+        playersLabel.Text = "JOGADORES: "
+            .. #Players:GetPlayers()
+    end
+end)
+
 local welcome = card(
 home,
 "WelcomeCard",
-UDim2.fromOffset(0, 31),
+UDim2.fromOffset(0, 76),
 UDim2.new(1, 0, 0, 65)
 )
 
@@ -571,7 +663,7 @@ false
 local statusCard = card(
 home,
 "StatusCard",
-UDim2.fromOffset(0, 105),
+UDim2.fromOffset(0, 150),
 UDim2.new(1, 0, 0, 59)
 )
 
@@ -598,7 +690,7 @@ true
 local infoCard = card(
 home,
 "InfoCard",
-UDim2.fromOffset(0, 173),
+UDim2.fromOffset(0, 218),
 UDim2.new(1, 0, 0, 57)
 )
 
@@ -625,7 +717,7 @@ true
 label(
 home,
 "Novas opcoes poderao ser adicionadas aqui.",
-UDim2.fromOffset(0, 239),
+UDim2.fromOffset(0, 284),
 UDim2.new(1, 0, 0, 30),
 COLORS.Gray,
 9,
