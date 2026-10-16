@@ -791,8 +791,9 @@ COLORS.White,
 true
 )
 
-label(
-welcome,
+local welcome = card(
+    homeScroll,
+    "WelcomeCard",
 "Seu espaco de configuracao",
 UDim2.fromOffset(10, 33),
 UDim2.new(1, -20, 0, 19),
@@ -802,7 +803,7 @@ false
 )
 
 local statusCard = card(
-home,
+homeScroll)
 "StatusCard",
 UDim2.fromOffset(0, 150),
 UDim2.new(1, 0, 0, 59)
@@ -829,8 +830,8 @@ true
 )
 
 local infoCard = card(
-home,
-"InfoCard",
+    homeScroll,
+    "InfoCard",
 UDim2.fromOffset(0, 218),
 UDim2.new(1, 0, 0, 57)
 )
