@@ -1424,6 +1424,94 @@ local sizeSaveButton = create("TextButton", {
 round(sizeSaveButton, 6)
 
 --==================================================
+-- PHANTOM V3 | LOGICA DO CONTROLE DE TAMANHO
+--==================================================
+
+local sizeDragging = false
+
+local function updateSizeSlider(inputX)
+    local trackX = sizeTrack.AbsolutePosition.X
+    local trackWidth = sizeTrack.AbsoluteSize.X
+
+    if trackWidth <= 0 then
+        return
+    end
+
+    local alpha = math.clamp(
+        (inputX - trackX) / trackWidth,
+        0,
+        1
+    )
+
+    local scale = 0.50 + alpha * 0.75
+    scale = math.floor(scale * 100 + 0.5) / 100
+
+    windowScale.Scale = scale
+    sizeKnob.Position = UDim2.new(alpha, 0, 0.5, 0)
+    sizeFill.Size = UDim2.new(alpha, 0, 1, 0)
+    sizeValue.Text = tostring(math.floor(scale * 100 + 0.5)) .. "%"
+end
+
+local function beginSizeDrag(input)
+    sizeDragging = true
+    updateSizeSlider(input.Position.X)
+end
+
+sizeKnob.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1
+        or input.UserInputType == Enum.UserInputType.Touch then
+        beginSizeDrag(input)
+    end
+end)
+
+sizeTrack.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1
+        or input.UserInputType == Enum.UserInputType.Touch then
+        beginSizeDrag(input)
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if sizeDragging then
+        if input.UserInputType == Enum.UserInputType.MouseMovement
+            or input.UserInputType == Enum.UserInputType.Touch then
+            updateSizeSlider(input.Position.X)
+        end
+    end
+end)
+
+UserInputService.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1
+        or input.UserInputType == Enum.UserInputType.Touch then
+        sizeDragging = false
+    end
+end)
+
+-- Carregar o tamanho salvo na regua
+do
+    local scale = windowScale.Scale
+    local alpha = (scale - 0.50) / 0.75
+
+    sizeKnob.Position = UDim2.new(alpha, 0, 0.5, 0)
+    sizeFill.Size = UDim2.new(alpha, 0, 1, 0)
+    sizeValue.Text = tostring(math.floor(scale * 100 + 0.5)) .. "%"
+end
+
+-- Salvar tamanho escolhido
+sizeSaveButton.Activated:Connect(function()
+    local success = saveWindowScale(windowScale.Scale)
+
+    if success then
+        sizeValue.Text = "SALVO: "
+            .. tostring(math.floor(windowScale.Scale * 100 + 0.5))
+            .. "%"
+    else
+        sizeValue.Text = "ERRO AO SALVAR"
+    end
+end)
+
+
+--==================================================
 -- CONTROLE DE ABERTURA
 -- Declarado antes dos eventos dos botoes
 --==================================================
