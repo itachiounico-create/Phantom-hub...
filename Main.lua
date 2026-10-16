@@ -1289,9 +1289,9 @@ for _, def in ipairs(themeDefinitions) do
 end
 
 -- Botao salvar
-local saveThemeButton = create("TextButton", {
+saveThemeButton = create("TextButton", {
     Name = "SaveThemeButton",
-    Position = UDim2.new(0, 0, 1, -27),
+    Position = UDim2.fromOffset(0, 0),
     Size = UDim2.new(0.5, -3, 0, 22),
     BackgroundColor3 = Color3.fromRGB(65, 45, 80),
     Text = "SALVAR CORES",
@@ -1300,7 +1300,7 @@ local saveThemeButton = create("TextButton", {
     TextSize = 9,
     BorderSizePixel = 0,
     ZIndex = 4
-}, settings)
+}, themeScroll)
 
 round(saveThemeButton, 6)
 
