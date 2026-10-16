@@ -384,6 +384,74 @@ ClipsDescendants = true,
 ZIndex = 1
 }, gui)
 
+local windowScale = create("UIScale", { 
+    Name = "WindowScale",
+    Scale = 1
+}, window)
+--==================================================
+-- PHANTOM V3 | CONFIGURACAO DE TAMANHO
+--==================================================
+
+local SIZE_FILE = "PhantomV3_WindowSize.json"
+
+local MIN_WINDOW_SCALE = 0.75
+local MAX_WINDOW_SCALE = 1.25
+local DEFAULT_WINDOW_SCALE = 1
+
+local function loadWindowScale()
+    if not (isfile and readfile) then
+        return DEFAULT_WINDOW_SCALE
+    end
+
+    local success, result = pcall(function()
+        if not isfile(SIZE_FILE) then
+            return DEFAULT_WINDOW_SCALE
+        end
+
+        local data = game:GetService("HttpService"):JSONDecode(
+            readfile(SIZE_FILE)
+        )
+
+        local scale = tonumber(data.Scale)
+
+        if scale then
+            return math.clamp(
+                scale,
+                MIN_WINDOW_SCALE,
+                MAX_WINDOW_SCALE
+            )
+        end
+
+        return DEFAULT_WINDOW_SCALE
+    end)
+
+    if success then
+        return result
+    end
+
+    return DEFAULT_WINDOW_SCALE
+end
+
+local function saveWindowScale(scale)
+    if not (writefile and isfile) then
+        return false
+    end
+
+    local success = pcall(function()
+        local data = {
+            Scale = scale
+        }
+
+        writefile(
+            SIZE_FILE,
+            game:GetService("HttpService"):JSONEncode(data)
+        )
+    end)
+
+    return success
+end
+windowScale.Scale = loadWindowScale()
+
 round(window, 14)
 
 -- CONTORNO NEON ANIMADO
