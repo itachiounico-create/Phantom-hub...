@@ -1057,6 +1057,8 @@ local function updateThemeLayout()
     for _, def in ipairs(themeDefinitions) do
         local section = themeSections[def.key]
         local isOpen = expandedThemeKey == def.key
+        local saveThemeButton
+        local resetThemeButton
 
         section.holder.Position = UDim2.fromOffset(0, y)
 
@@ -1068,9 +1070,15 @@ local function updateThemeLayout()
         y = y + height + 5
     end
 
-    themeScroll.CanvasSize = UDim2.fromOffset(0, y + 2)
-end
+    if saveThemeButton and resetThemeButton then
+    saveThemeButton.Position = UDim2.fromOffset(0, y + 2)
+    resetThemeButton.Position = UDim2.fromOffset(0, y + 29)
 
+    themeScroll.CanvasSize = UDim2.fromOffset(0, y + 56)
+else
+    themeScroll.CanvasSize = UDim2.fromOffset(0, y + 2)
+    end
+    
 local function makeThemeSection(def)
     local holder = create("Frame", {
         Name = def.key .. "ColorSection",
