@@ -1344,14 +1344,16 @@ themeStatus.Text = themeWasLoaded
 -- PHANTOM V3 | CONTROLE DE TAMANHO
 --==================================================
 
+
 local sizePanel = create("Frame", {
     Name = "WindowSizePanel",
-    Position = UDim2.fromOffset(0, 0),
-    Size = UDim2.new(1, 0, 1, 0),
+    Position = UDim2.new(0, 0, 1, -91),
+    Size = UDim2.new(1, 0, 0, 86),
     BackgroundTransparency = 1,
     Visible = true,
     ZIndex = 3
 }, settings)
+
 
 local sizeTitle = label(
     sizePanel,
