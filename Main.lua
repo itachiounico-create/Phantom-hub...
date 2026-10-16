@@ -655,8 +655,8 @@ local homeScroll = create("ScrollingFrame", {
     ScrollBarThickness = 3,
     ScrollBarImageColor3 = COLORS.Purple,
     ScrollingDirection = Enum.ScrollingDirection.Y,
-    AutomaticCanvasSize = Enum.AutomaticSize.Y,
-    CanvasSize = UDim2.new(0, 0, 0, 0),
+    AutomaticCanvasSize = Enum.AutomaticSize.None,
+    CanvasSize = UDim2.new(0, 0, 0, 320),
     Active = true,
     ZIndex = 3
 }, home)
