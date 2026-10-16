@@ -764,7 +764,8 @@ RunService.RenderStepped:Connect(function(dt)
 end)
 
 local welcome = card(
-home,
+    homeScroll,
+    "WelcomeCard",
 "WelcomeCard",
 UDim2.fromOffset(0, 76),
 UDim2.new(1, 0, 0, 65)
@@ -794,19 +795,19 @@ true
 local welcome = card(
     homeScroll,
     "WelcomeCard",
-"Seu espaco de configuracao",
-UDim2.fromOffset(10, 33),
-UDim2.new(1, -20, 0, 19),
+    UDim2.fromOffset(0, 76),
+    UDim2.new(1, 0, 0, 65)
+)
 COLORS.Gray,
 9,
 false
 )
 
 local statusCard = card(
-homeScroll)
-"StatusCard",
-UDim2.fromOffset(0, 150),
-UDim2.new(1, 0, 0, 59)
+    homeScroll,
+    "StatusCard",
+    UDim2.fromOffset(0, 150),
+    UDim2.new(1, 0, 0, 59)
 )
 
 label(
@@ -857,15 +858,14 @@ true
 )
 
 label(
-home,
-"Novas opcoes poderao ser adicionadas aqui.",
-UDim2.fromOffset(0, 284),
-UDim2.new(1, 0, 0, 30),
-COLORS.Gray,
-9,
-false
+    homeScroll,
+    "Novas opcoes poderao ser adicionadas aqui.",
+    UDim2.fromOffset(0, 284),
+    UDim2.new(1, 0, 0, 30),
+    COLORS.Gray,
+    9,
+    false
 )
-
 --==================================================
 -- PAGINA AJUSTES
 --==================================================
