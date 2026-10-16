@@ -929,10 +929,25 @@ local function applyThemeColor(key, color)
         pageHost.BackgroundTransparency = 0
 
     elseif key == "Neon" then
-        windowStroke.Color = color
-        borderGradient.Color = ColorSequence.new(color)
-        topAccent.BackgroundColor3 = color
-        themeScroll.ScrollBarImageColor3 = color
+    local dark = color:Lerp(Color3.new(0, 0, 0), 0.65)
+    local bright = color:Lerp(Color3.new(1, 1, 1), 0.45)
+
+    windowStroke.Color = color
+
+    borderGradient.Color = ColorSequence.new({
+        ColorSequenceKeypoint.new(0, dark),
+        ColorSequenceKeypoint.new(0.42, color),
+        ColorSequenceKeypoint.new(0.5, bright),
+        ColorSequenceKeypoint.new(0.58, color),
+        ColorSequenceKeypoint.new(1, dark)
+    })
+
+    topAccent.BackgroundColor3 = color
+    themeScroll.ScrollBarImageColor3 = color
+
+    for _, tab in pairs(tabs) do
+        tab.Indicator.BackgroundColor3 = color
+        end
 
         for _, tab in pairs(tabs) do
             tab.Indicator.BackgroundColor3 = color
