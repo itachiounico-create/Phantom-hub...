@@ -1347,19 +1347,28 @@ themeStatus.Text = themeWasLoaded
 
 local sizePanel = create("Frame", {
     Name = "WindowSizePanel",
-    Position = UDim2.new(0, 0, 0, 28),
-    Size = UDim2.new(1, 0, 1, -119),
+    Position = UDim2.new(0, 0, 0, 160),
+    Size = UDim2.new(1, 0, 1, -251),
     BackgroundTransparency = 1,
     Visible = true,
     ZIndex = 3
 }, settings)
 
 
+local sizePanel = create("Frame", {
+    Name = "WindowSizePanel",
+    Position = UDim2.new(0, 0, 0, 160),
+    Size = UDim2.new(1, 0, 0, 100),
+    BackgroundTransparency = 1,
+    Visible = true,
+    ZIndex = 3
+}, settings)
+
 local sizeTitle = label(
     sizePanel,
     "TAMANHO DO MENU",
     UDim2.fromOffset(0, 0),
-    UDim2.new(1, 0, 0, 22),
+    UDim2.new(1, 0, 0, 20),
     COLORS.PurpleLight,
     12,
     true
@@ -1369,16 +1378,16 @@ local sizeValue = label(
     sizePanel,
     "100%",
     UDim2.fromOffset(0, 20),
-    UDim2.new(1, 0, 0, 25),
+    UDim2.new(1, 0, 0, 22),
     COLORS.White,
-    18,
+    16,
     true
 )
 
 local sizeTrack = create("Frame", {
     Name = "SizeTrack",
-    Position = UDim2.new(0, 12, 0, 84),
-    Size = UDim2.new(0, 12, 0, 53),
+    Position = UDim2.new(0, 12, 0, 51),
+    Size = UDim2.new(1, -24, 0, 6),
     BackgroundColor3 = COLORS.Element,
     BorderSizePixel = 0,
     ZIndex = 4
