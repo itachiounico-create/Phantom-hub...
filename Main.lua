@@ -956,7 +956,7 @@ true
 local themeScroll = create("ScrollingFrame", {
     Name = "ThemeColorScroll",
     Position = UDim2.fromOffset(0, 28),
-    Size = UDim2.new(1, 0, 1, -91),
+    Size = UDim2.new(1, 0, 1, -48),
     BackgroundTransparency = 1,
     BorderSizePixel = 0,
     ScrollBarThickness = 3,
