@@ -120,76 +120,128 @@ IgnoreGuiInset = true,
 ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 }, playerGui)
 
+
 --==================================================
--- BOTAO FLUTUANTE CYBER
+-- BOTAO FLUTUANTE ORBITAL BLACK HOLE V4
 --==================================================
 
 local openButton = create("ImageButton", {
-Name = "OpenButton",
-Size = UDim2.fromOffset(35, 35),
-Position = UDim2.new(0, 18, 0.5, -25),
-BackgroundColor3 = COLORS.Background,
-Image = "",
-AutoButtonColor = false,
-Visible = false,
-Active = true,
-ZIndex = 10
+    Name = "OpenButton",
+    AnchorPoint = Vector2.new(0, 0.5),
+    Size = UDim2.fromOffset(35, 35),
+    Position = UDim2.new(0, 18, 0.5, 0),
+    BackgroundColor3 = Color3.fromRGB(5, 4, 10),
+    Image = "",
+    AutoButtonColor = false,
+    Visible = false,
+    Active = true,
+    ClipsDescendants = false,
+    ZIndex = 10
 }, gui)
 
-round(openButton, 16)
-outline(openButton, COLORS.Purple, 2)
+round(openButton, 50)
+outline(openButton, COLORS.Purple, 1.5)
 
+-- HALO ROXO
 local halo = create("Frame", {
-Name = "Halo",
-AnchorPoint = Vector2.new(0.5, 0.5),
-Position = UDim2.fromScale(0.5, 0.48),
-Size = UDim2.fromOffset(38, 39),
-BackgroundColor3 = COLORS.Purple,
-BackgroundTransparency = 0.58,
-BorderSizePixel = 0,
-ZIndex = 11
+    Name = "PurpleHalo",
+    AnchorPoint = Vector2.new(0.5, 0.5),
+    Position = UDim2.fromScale(0.5, 0.5),
+    Size = UDim2.fromOffset(39, 39),
+    BackgroundColor3 = COLORS.Purple,
+    BackgroundTransparency = 0.7,
+    BorderSizePixel = 0,
+    ZIndex = 10
 }, openButton)
 
-round(halo, 14)
+round(halo, 50)
 
-local mask = create("Frame", {
-Name = "CyberMask",
-AnchorPoint = Vector2.new(0.5, 0.5),
-Position = UDim2.fromScale(0.5, 0.47),
-Size = UDim2.fromOffset(28, 30),
-BackgroundColor3 = COLORS.White,
-BorderSizePixel = 0,
-ZIndex = 12
+-- ORBITA EXTERNA
+local orbit = create("Frame", {
+    Name = "OrbitalRing",
+    AnchorPoint = Vector2.new(0.5, 0.5),
+    Position = UDim2.fromScale(0.5, 0.5),
+    Size = UDim2.fromOffset(43, 17),
+    BackgroundTransparency = 1,
+    BorderSizePixel = 0,
+    Rotation = -25,
+    ZIndex = 12
 }, openButton)
 
-round(mask, 9)
-outline(mask, COLORS.PurpleLight, 1)
+round(orbit, 50)
+outline(orbit, COLORS.PurpleLight, 1.7)
 
--- Olhos
-for _, x in ipairs({5, 17}) do
-local eye = create("Frame", {
-Position = UDim2.fromOffset(x, 10),
-Size = UDim2.fromOffset(6, 8),
-BackgroundColor3 = Color3.fromRGB(57, 23, 91),
-BorderSizePixel = 0,
-ZIndex = 13
-}, mask)
+-- ORBITA INTERNA
+local orbit2 = create("Frame", {
+    Name = "SecondaryOrbit",
+    AnchorPoint = Vector2.new(0.5, 0.5),
+    Position = UDim2.fromScale(0.5, 0.5),
+    Size = UDim2.fromOffset(39, 13),
+    BackgroundTransparency = 1,
+    BorderSizePixel = 0,
+    Rotation = 55,
+    ZIndex = 11
+}, openButton)
 
-round(eye, 4)
+round(orbit2, 50)
+outline(orbit2, COLORS.Purple, 1.2)
 
-end
+-- NUCLEO DO BURACO NEGRO
+local core = create("Frame", {
+    Name = "BlackHoleCore",
+    AnchorPoint = Vector2.new(0.5, 0.5),
+    Position = UDim2.fromScale(0.5, 0.5),
+    Size = UDim2.fromOffset(23, 23),
+    BackgroundColor3 = Color3.fromRGB(3, 2, 7),
+    BorderSizePixel = 0,
+    ZIndex = 13
+}, openButton)
 
--- Boca
-local mouth = create("Frame", {
-AnchorPoint = Vector2.new(0.5, 0),
-Position = UDim2.new(0.5, 0, 0, 22),
-Size = UDim2.fromOffset(7, 3),
-BackgroundColor3 = COLORS.Purple,
-BorderSizePixel = 0,
-ZIndex = 13
-}, mask)
+round(core, 50)
+outline(core, Color3.fromRGB(115, 53, 220), 1)
 
-round(mouth, 2)
+-- PONTO CENTRAL
+local energy = create("Frame", {
+    Name = "EnergyPoint",
+    AnchorPoint = Vector2.new(0.5, 0.5),
+    Position = UDim2.fromScale(0.5, 0.5),
+    Size = UDim2.fromOffset(4, 4),
+    BackgroundColor3 = COLORS.White,
+    BorderSizePixel = 0,
+    ZIndex = 14
+}, openButton)
+
+round(energy, 50)
+
+-- ANIMACAO DAS ORBITAS
+TweenService:Create(
+    orbit,
+    TweenInfo.new(7, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, -1),
+    {Rotation = 335}
+):Play()
+
+TweenService:Create(
+    orbit2,
+    TweenInfo.new(9, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, -1),
+    {Rotation = 415}
+):Play()
+
+-- PULSO DO HALO
+TweenService:Create(
+    halo,
+    TweenInfo.new(
+        1.4,
+        Enum.EasingStyle.Sine,
+        Enum.EasingDirection.InOut,
+        -1,
+        true
+    ),
+    {
+        BackgroundTransparency = 0.48,
+        Size = UDim2.fromOffset(44, 44)
+    }
+):Play()
+
 
 --==================================================
 -- JANELA PRINCIPAL
@@ -209,7 +261,6 @@ ZIndex = 1
 
 round(window, 14)
 
-round(contentMask, 13)
 -- CONTORNO NEON ANIMADO
 local windowStroke = outline(
     window,
