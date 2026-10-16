@@ -1305,9 +1305,9 @@ saveThemeButton = create("TextButton", {
 round(saveThemeButton, 6)
 
 -- Botao resetar
-local resetThemeButton = create("TextButton", {
+resetThemeButton = create("TextButton", {
     Name = "ResetThemeButton",
-    Position = UDim2.new(0.5, 3, 1, -27),
+    Position = UDim2.fromOffset(0, 0),
     Size = UDim2.new(0.5, -3, 0, 22),
     BackgroundColor3 = COLORS.Element,
     Text = "RESETAR CORES",
@@ -1316,7 +1316,7 @@ local resetThemeButton = create("TextButton", {
     TextSize = 9,
     BorderSizePixel = 0,
     ZIndex = 4
-}, settings)
+}, themeScroll)
 
 round(resetThemeButton, 6)
 
