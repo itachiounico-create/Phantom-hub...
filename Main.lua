@@ -1187,8 +1187,8 @@ end
 -- Botao salvar
 local saveThemeButton = create("TextButton", {
     Name = "SaveThemeButton",
-    Position = UDim2.new(0, 0, 1, -31),
-    Size = UDim2.new(0.5, -4, 0, 27),
+    Position = UDim2.new(0, 0, 1, -27),
+    Size = UDim2.new(0.5, -3, 0, 22),
     BackgroundColor3 = Color3.fromRGB(65, 45, 80),
     Text = "SALVAR CORES",
     TextColor3 = COLORS.White,
@@ -1203,8 +1203,8 @@ round(saveThemeButton, 6)
 -- Botao resetar
 local resetThemeButton = create("TextButton", {
     Name = "ResetThemeButton",
-    Position = UDim2.new(0.5, 4, 1, -31),
-    Size = UDim2.new(0.5, -4, 0, 27),
+    Position = UDim2.new(0.5, 3, 1, -27),
+    Size = UDim2.new(0.5, -3, 0, 22),
     BackgroundColor3 = COLORS.Element,
     Text = "RESETAR CORES",
     TextColor3 = COLORS.White,
