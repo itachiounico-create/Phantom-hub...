@@ -766,9 +766,8 @@ end)
 local welcome = card(
     homeScroll,
     "WelcomeCard",
-"WelcomeCard",
-UDim2.fromOffset(0, 76),
-UDim2.new(1, 0, 0, 65)
+    UDim2.fromOffset(0, 76),
+    UDim2.new(1, 0, 0, 65)
 )
 
 local welcomeDivider = create("Frame", {
@@ -781,26 +780,24 @@ local welcomeDivider = create("Frame", {
     ZIndex = 3
 }, welcome)
 
+label(
+    welcome,
+    "Bem-vindo ao PHANTOM",
+    UDim2.fromOffset(10, 8),
+    UDim2.new(1, -20, 0, 22),
+    COLORS.White,
+    11,
+    true
+)
 
 label(
-welcome,
-"Bem-vindo ao PHANTOM",
-UDim2.fromOffset(10, 8),
-UDim2.new(1, -20, 0, 22),
-COLORS.White,
-11,
-true
-)
-
-local welcome = card(
-    homeScroll,
-    "WelcomeCard",
-    UDim2.fromOffset(0, 76),
-    UDim2.new(1, 0, 0, 65)
-)
-COLORS.Gray,
-9,
-false
+    welcome,
+    "Seu espaco de configuracao",
+    UDim2.fromOffset(10, 33),
+    UDim2.new(1, -20, 0, 19),
+    COLORS.Gray,
+    9,
+    false
 )
 
 local statusCard = card(
