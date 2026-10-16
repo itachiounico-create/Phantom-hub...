@@ -1340,6 +1340,88 @@ themeStatus.Text = themeWasLoaded
     and "Ultimas cores salvas carregadas."
     or "Tema padrao carregado."
 
+--==================================================
+-- PHANTOM V3 | CONTROLE DE TAMANHO
+--==================================================
+
+local sizePanel = create("Frame", {
+    Name = "WindowSizePanel",
+    Position = UDim2.fromOffset(0, 0),
+    Size = UDim2.new(1, 0, 1, 0),
+    BackgroundTransparency = 1,
+    Visible = false,
+    ZIndex = 3
+}, settings)
+
+local sizeTitle = label(
+    sizePanel,
+    "TAMANHO DO MENU",
+    UDim2.fromOffset(0, 4),
+    UDim2.new(1, 0, 0, 22),
+    COLORS.PurpleLight,
+    12,
+    true
+)
+
+local sizeValue = label(
+    sizePanel,
+    "100%",
+    UDim2.fromOffset(0, 43),
+    UDim2.new(1, 0, 0, 25),
+    COLORS.White,
+    18,
+    true
+)
+
+local sizeTrack = create("Frame", {
+    Name = "SizeTrack",
+    Position = UDim2.new(0, 12, 0, 84),
+    Size = UDim2.new(1, -24, 0, 6),
+    BackgroundColor3 = COLORS.Element,
+    BorderSizePixel = 0,
+    ZIndex = 4
+}, sizePanel)
+
+round(sizeTrack, 4)
+
+local sizeFill = create("Frame", {
+    Name = "SizeFill",
+    Size = UDim2.new(2 / 3, 0, 1, 0),
+    BackgroundColor3 = COLORS.Purple,
+    BorderSizePixel = 0,
+    ZIndex = 5
+}, sizeTrack)
+
+round(sizeFill, 4)
+
+local sizeKnob = create("TextButton", {
+    Name = "SizeKnob",
+    AnchorPoint = Vector2.new(0.5, 0.5),
+    Position = UDim2.new(2 / 3, 0, 0.5, 0),
+    Size = UDim2.fromOffset(18, 18),
+    BackgroundColor3 = COLORS.White,
+    Text = "",
+    BorderSizePixel = 0,
+    AutoButtonColor = false,
+    ZIndex = 6
+}, sizeTrack)
+
+round(sizeKnob, 9)
+
+local sizeSaveButton = create("TextButton", {
+    Name = "SaveWindowSizeButton",
+    Position = UDim2.fromOffset(0, 112),
+    Size = UDim2.new(1, 0, 0, 26),
+    BackgroundColor3 = Color3.fromRGB(65, 45, 80),
+    Text = "SALVAR TAMANHO",
+    TextColor3 = COLORS.White,
+    Font = Enum.Font.GothamBold,
+    TextSize = 10,
+    BorderSizePixel = 0,
+    ZIndex = 4
+}, sizePanel)
+
+round(sizeSaveButton, 6)
 
 --==================================================
 -- CONTROLE DE ABERTURA
