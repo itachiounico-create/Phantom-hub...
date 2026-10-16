@@ -1349,7 +1349,7 @@ local sizePanel = create("Frame", {
     Position = UDim2.fromOffset(0, 0),
     Size = UDim2.new(1, 0, 1, 0),
     BackgroundTransparency = 1,
-    Visible = false,
+    Visible = true,
     ZIndex = 3
 }, settings)
 
