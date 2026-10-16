@@ -1348,16 +1348,6 @@ themeStatus.Text = themeWasLoaded
 local sizePanel = create("Frame", {
     Name = "WindowSizePanel",
     Position = UDim2.new(0, 0, 0, 160),
-    Size = UDim2.new(1, 0, 1, -251),
-    BackgroundTransparency = 1,
-    Visible = true,
-    ZIndex = 3
-}, settings)
-
-
-local sizePanel = create("Frame", {
-    Name = "WindowSizePanel",
-    Position = UDim2.new(0, 0, 0, 160),
     Size = UDim2.new(1, 0, 0, 100),
     BackgroundTransparency = 1,
     Visible = true,
