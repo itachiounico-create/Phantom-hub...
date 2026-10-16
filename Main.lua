@@ -44,7 +44,7 @@ local THEME_FILE = "PhantomV3_Main_Colors.json"
 local THEME_PALETTE = {
     Vermelho = Color3.fromRGB(239, 68, 68),
     Preto = Color3.fromRGB(8, 8, 8),
-    Roxo = Color3.fromRGB(168, 85, 247),
+    Roxo = Color3.fromRGB(105, 35, 170),
     Branco = Color3.fromRGB(245, 245, 245)
 }
 
