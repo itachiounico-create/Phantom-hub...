@@ -668,6 +668,8 @@ return page
 
 end
 
+local visualPage = createPage("ESPVisual")
+
 local function createTab(name, text, y)
 local button = create("TextButton", {
 Name = name .. "Tab",
@@ -707,6 +709,8 @@ end
 
 createTab("Principal", "⌂  Principal", 34)
 createTab("Ajustes", "⚙  Ajustes", 77)
+createTab("ESPVisual", "◉  ESP / VISUAL", 120)
+
 
 --==================================================
 -- PAGINA PRINCIPAL
