@@ -1083,7 +1083,7 @@ local function updateThemeLayout()
     y = y + 140
 end
 
-themeScroll.CanvasSize = UDim2.fromOffset(0, y + 40)
+themeScroll.CanvasSize = UDim2.fromOffset(0, y + 250)
 
     themeScroll.CanvasSize = UDim2.fromOffset(0, y + 8)
 end
