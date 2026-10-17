@@ -1053,13 +1053,14 @@ end
 local saveThemeButton
 local resetThemeButton
 local sizePanel
+
 local function updateThemeLayout()
     local y = 0
 
     for _, def in ipairs(themeDefinitions) do
         local section = themeSections[def.key]
         local isOpen = expandedThemeKey == def.key
-        
+
         section.holder.Position = UDim2.fromOffset(0, y)
 
         local height = isOpen and 145 or 39
@@ -1071,13 +1072,18 @@ local function updateThemeLayout()
     end
 
     if saveThemeButton and resetThemeButton then
-    saveThemeButton.Position = UDim2.new(0, 0, 0, y + 2)
-    resetThemeButton.Position = UDim2.new(0.5, 3, 0, y + 2)
+        saveThemeButton.Position = UDim2.new(0, 0, 0, y + 2)
+        resetThemeButton.Position = UDim2.new(0.5, 3, 0, y + 2)
 
-    themeScroll.CanvasSize = UDim2.fromOffset(0, y + 31)
-else
-    themeScroll.CanvasSize = UDim2.fromOffset(0, y + 2)
-end
+        y = y + 29
+    end
+
+    if sizePanel then
+        sizePanel.Position = UDim2.fromOffset(0, y + 8)
+        y = y + 116
+    end
+
+    themeScroll.CanvasSize = UDim2.fromOffset(0, y + 8)
 end
 
 local function makeThemeSection(def)
