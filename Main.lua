@@ -670,6 +670,126 @@ end
 
 local visualPage = createPage("ESPVisual")
 
+--==================================================
+-- PHANTOM V3 | ESP / VISUAL CONTROLS
+-- Controles da página visual
+--==================================================
+
+local visualSettings = {
+    master = false,
+    name = true,
+    distance = true,
+    health = true
+}
+
+local function createVisualToggle(title, description, key, order)
+    local row = create("Frame", {
+        Name = key .. "Toggle",
+        Position = UDim2.fromOffset(0, order * 54),
+        Size = UDim2.new(1, -4, 0, 48),
+        BackgroundColor3 = COLORS.Panel,
+        BackgroundTransparency = 0.12,
+        BorderSizePixel = 0,
+        ZIndex = 3
+    }, visualPage)
+
+    round(row, 9)
+    outline(row, COLORS.Purple, 1, 0.55)
+
+    label(
+        row,
+        title,
+        UDim2.fromOffset(10, 5),
+        UDim2.new(1, -76, 0, 19),
+        COLORS.White,
+        12
+    )
+
+    label(
+        row,
+        description,
+        UDim2.fromOffset(10, 25),
+        UDim2.new(1, -76, 0, 15),
+        COLORS.Gray,
+        9
+    )
+
+    local toggle = create("TextButton", {
+        Name = "Toggle",
+        Position = UDim2.new(1, -58, 0.5, -12),
+        Size = UDim2.fromOffset(46, 24),
+        BackgroundColor3 = COLORS.Element,
+        BorderSizePixel = 0,
+        Text = "",
+        AutoButtonColor = false,
+        ZIndex = 4
+    }, row)
+
+    round(toggle, 12)
+
+    local knob = create("Frame", {
+        Name = "Knob",
+        Position = UDim2.fromOffset(3, 3),
+        Size = UDim2.fromOffset(18, 18),
+        BackgroundColor3 = COLORS.White,
+        BorderSizePixel = 0,
+        ZIndex = 5
+    }, toggle)
+
+    round(knob, 9)
+
+    local function refresh()
+        local enabled = visualSettings[key]
+
+        toggle.BackgroundColor3 = enabled
+            and COLORS.Purple
+            or COLORS.Element
+
+        knob.Position = enabled
+            and UDim2.new(1, -21, 0, 3)
+            or UDim2.fromOffset(3, 3)
+    end
+
+    toggle.Activated:Connect(function()
+        visualSettings[key] = not visualSettings[key]
+        refresh()
+
+        -- A atualização dos indicadores será conectada
+        -- na próxima etapa.
+    end)
+
+    refresh()
+end
+
+createVisualToggle(
+    "ESP / VISUAL ALL",
+    "Ativar ou desativar os indicadores",
+    "master",
+    0
+)
+
+createVisualToggle(
+    "NOME",
+    "Mostrar nomes dos personagens",
+    "name",
+    1
+)
+
+createVisualToggle(
+    "DISTÂNCIA",
+    "Mostrar distância dos personagens",
+    "distance",
+    2
+)
+
+createVisualToggle(
+    "VIDA 3D",
+    "Mostrar barra visual de vida",
+    "health",
+    3
+)
+
+
 local function createTab(name, text, y)
 local button = create("TextButton", {
 Name = name .. "Tab",
