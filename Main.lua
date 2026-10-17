@@ -1050,16 +1050,15 @@ local function applyAllThemeColors()
         end
     end
 end
-
+local saveThemeButton
+local resetThemeButton
 local function updateThemeLayout()
     local y = 0
 
     for _, def in ipairs(themeDefinitions) do
         local section = themeSections[def.key]
         local isOpen = expandedThemeKey == def.key
-        local saveThemeButton
-        local resetThemeButton
-
+        
         section.holder.Position = UDim2.fromOffset(0, y)
 
         local height = isOpen and 145 or 39
