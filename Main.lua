@@ -1366,7 +1366,10 @@ sizePanel = create("Frame", {
     Size = UDim2.new(1, 0, 0, 100),
     BackgroundTransparency = 1,
     Visible = true,
-    ZIndex = 3
+BackgroundColor3 = COLORS.Background,
+BackgroundTransparency = 1,
+BorderSizePixel = 0,
+ZIndex = 3
 }, themeScroll)
 
 local sizeTitle = label(
