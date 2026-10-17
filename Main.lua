@@ -1071,6 +1071,7 @@ local function updateThemeLayout()
         y = y + height + 5
     end
 
+
     if saveThemeButton and resetThemeButton then
         saveThemeButton.Position = UDim2.new(0, 0, 0, y + 2)
         resetThemeButton.Position = UDim2.new(0.5, 3, 0, y + 2)
@@ -1079,8 +1080,11 @@ local function updateThemeLayout()
     end
 
     if sizePanel then
-    sizePanel.Position = UDim2.fromOffset(0, y + 40)
-    y = y + 180
+        sizePanel.Position = UDim2.fromOffset(0, y + 8)
+        y = y + 116
+    end
+
+    themeScroll.CanvasSize = UDim2.fromOffset(0, y + 250)
 end
 
 themeScroll.CanvasSize = UDim2.fromOffset(0, y + 200)
