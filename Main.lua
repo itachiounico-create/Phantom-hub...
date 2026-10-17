@@ -1360,7 +1360,7 @@ local sizePanel = create("Frame", {
     BackgroundTransparency = 1,
     Visible = true,
     ZIndex = 3
-}, settings)
+}, themeScroll)
 
 local sizeTitle = label(
     sizePanel,
