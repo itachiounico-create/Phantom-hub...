@@ -1085,7 +1085,7 @@ end
 
 themeScroll.CanvasSize = UDim2.fromOffset(0, y + 250)
 
-    themeScroll.CanvasSize = UDim2.fromOffset(0, y + 8)
+    themeScroll.CanvasSize = UDim2.fromOffset(0, y + 10)
 end
 
 local function makeThemeSection(def)
