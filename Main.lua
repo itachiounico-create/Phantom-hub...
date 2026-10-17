@@ -1583,6 +1583,11 @@ tabs.Ajustes.Button.Activated:Connect(function()
 showPage("Ajustes")
 end)
 
+tabs.ESPVisual.Button.Activated:Connect(function()
+    showPage("ESPVisual")
+end)
+
+
 closeButton.Activated:Connect(function()
 setMenuOpen(false)
 end)
