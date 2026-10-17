@@ -1083,7 +1083,7 @@ local function updateThemeLayout()
     y = y + 140
 end
 
-themeScroll.CanvasSize = UDim2.fromOffset(0, y + 250)
+themeScroll.CanvasSize = UDim2.fromOffset(0, y + 200)
 end
 
 local function makeThemeSection(def)
