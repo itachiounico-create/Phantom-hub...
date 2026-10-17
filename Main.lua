@@ -1079,9 +1079,11 @@ local function updateThemeLayout()
     end
 
     if sizePanel then
-        sizePanel.Position = UDim2.fromOffset(0, y + 8)
-        y = y + 116
-    end
+    sizePanel.Position = UDim2.fromOffset(0, y + 12)
+    y = y + 140
+end
+
+themeScroll.CanvasSize = UDim2.fromOffset(0, y + 40)
 
     themeScroll.CanvasSize = UDim2.fromOffset(0, y + 8)
 end
