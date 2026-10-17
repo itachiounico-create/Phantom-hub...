@@ -1080,8 +1080,6 @@ end
 end
 
 local function makeThemeSection(def)
-    
-local function makeThemeSection(def)
     local holder = create("Frame", {
         Name = def.key .. "ColorSection",
         Position = UDim2.fromOffset(0, 0),
