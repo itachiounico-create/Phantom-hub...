@@ -1052,6 +1052,7 @@ local function applyAllThemeColors()
 end
 local saveThemeButton
 local resetThemeButton
+local sizePanel
 local function updateThemeLayout()
     local y = 0
 
