@@ -1084,6 +1084,7 @@ local function updateThemeLayout()
 end
 
 themeScroll.CanvasSize = UDim2.fromOffset(0, y + 250)
+end
 
 local function makeThemeSection(def)
     local holder = create("Frame", {
