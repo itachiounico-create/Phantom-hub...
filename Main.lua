@@ -707,55 +707,7 @@ createVisualToggle(
     3
 )
 
---==================================================
--- PHANTOM V3 | VISUAL INDICATORS
--- Para testes na propria experiencia Roblox
---==================================================
-
-local RunService = game:GetService("RunService")
-
-local visualMarkers = {}
-local visualConnections = {}
-
-local function removeVisualMarker(target)
-    local data = visualMarkers[target]
-    if not data then return end
-
-    if data.gui then
-        data.gui:Destroy()
-    end
-
-    if data.healthGui then
-        data.healthGui:Destroy()
-    end
-
-    visualMarkers[target] = nil
-end
-
-local function createVisualMarker(target)
-    if target == player or visualMarkers[target] then
-        return
-    end
-
-    local character = target.Character
-    if not character then return end
-
-    local humanoid = character:FindFirstChildOfClass("Humanoid")
-    local root = character:FindFirstChild("HumanoidRootPart")
-    if not humanoid or not root then return end
-
-    local billboard = Instance.new("BillboardGui")
-    billboard.Name = "PhantomVisualMarker"
-    billboard.Adornee = root
-    billboard.Size = UDim2.fromOffset(160, 38)
-    billboard.StudsOffset = Vector3.new(0, 3, 0)
-    billboard.AlwaysOnTop = true
-    billboard.Enabled = false
-    billboard.Parent = playerGui
-
-    local text = Instance.new("TextLabel")
-    text.Name = "Info"
-    text.Size = UDim2.fromScale(1, 1)
+UDim2.fromScale(1, 1)
     text.BackgroundTransparency = 1
     text.Font = Enum.Font.GothamMedium
     text.TextSize = 11
@@ -866,39 +818,6 @@ end
 local function addVisualPlayer(target)
     if target == player then return end
 
-    createVisualMarker(target)
-
-    if visualConnections[target] then
-        visualConnections[target]:Disconnect()
-    end
-
-    visualConnections[target] = target.CharacterAdded:Connect(function()
-        removeVisualMarker(target)
-
-        task.defer(function()
-            if target.Parent == Players then
-                createVisualMarker(target)
-            end
-        end)
-    end)
-end
-
-for _, target in ipairs(Players:GetPlayers()) do
-    addVisualPlayer(target)
-end
-
-Players.PlayerAdded:Connect(addVisualPlayer)
-
-Players.PlayerRemoving:Connect(function(target)
-    removeVisualMarker(target)
-
-    if visualConnections[target] then
-        visualConnections[target]:Disconnect()
-        visualConnections[target] = nil
-    end
-end)
-
-RunService.Heartbeat:Connect(refreshVisualMarkers)
 
 -- Atualiza a visibilidade imediatamente ao tocar nos controles.
 -- Conectamos isso aos toggles existentes pelo estado compartilhado.
