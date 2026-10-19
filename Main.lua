@@ -9,7 +9,8 @@ local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
 local HttpService = game:GetService("HttpService")
-
+local RunService = game:GetService("RunService")
+local Stats = game:GetService("Stats")
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 
@@ -837,7 +838,7 @@ true
 
 local statusLabel = label(
 statusCard,
-"鈼�  Interface carregada",
+"• Interface carregada"
 UDim2.fromOffset(10, 27),
 UDim2.new(1, -20, 0, 22),
 COLORS.Green,
