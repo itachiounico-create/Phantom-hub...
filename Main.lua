@@ -59,7 +59,6 @@ local themeSelected = {}
 for key, value in pairs(THEME_DEFAULTS) do
     themeSelected[key] = value
 end
-
 local function validTheme(data)
     if type(data) ~= "table" then
         return false
@@ -82,13 +81,11 @@ local function loadTheme()
     end
 
     local existsOK, exists = pcall(isfile, THEME_FILE)
-
     if not existsOK or not exists then
         return false
     end
 
     local readOK, contents = pcall(readfile, THEME_FILE)
-
     if not readOK or type(contents) ~= "string" then
         return false
     end
@@ -116,37 +113,14 @@ local function saveTheme()
     local encodedOK, contents = pcall(function()
         return HttpService:JSONEncode(themeSelected)
     end)
-       if not encodedOK then
+
+    if not encodedOK then
         return false, "Erro ao preparar as cores"
     end
 
     local writeOK = pcall(writefile, THEME_FILE, contents)
-
     if not writeOK then
         return false, "Erro ao salvar o arquivo"
-    end
-
-    -- Verificar a gravacao quando a leitura estiver disponivel
-    if type(readfile) == "function" then
-        local readOK, saved = pcall(readfile, THEME_FILE)
-
-        if not readOK or type(saved) ~= "string" then
-            return false, "Nao foi possivel confirmar o arquivo"
-        end
-
-        local decodeOK, data = pcall(function()
-            return HttpService:JSONDecode(saved)
-        end)
-
-        if not decodeOK or not validTheme(data) then
-            return false, "Arquivo salvo, mas nao validado"
-        end
-
-        for key in pairs(THEME_DEFAULTS) do
-            if data[key] ~= themeSelected[key] then
-                return false, "As cores gravadas nao conferem"
-            end
-        end
     end
 
     return true, "Cores salvas!"
@@ -643,41 +617,40 @@ ClipsDescendants = true,
 ZIndex = 2
 }, window)
 
-, y)
-local button = create("TextButton", {
-Name = name .. "Tab",
-Position = UDim2.fromOffset(7, y),
-Size = UDim2.new(1, -14, 0, 37),
-BackgroundColor3 = COLORS.Element,
-Text = text,
-TextColor3 = COLORS.Gray,
-TextSize = 11,
-Font = Enum.Font.GothamMedium,
-AutoButtonColor = true,
-ZIndex = 3
-}, sidebar)
+local function createTab(name, text, y)
+    local button = create("TextButton", {
+        Name = name .. "Tab",
+        Position = UDim2.fromOffset(7, y),
+        Size = UDim2.new(1, -14, 0, 37),
+        BackgroundColor3 = COLORS.Element,
+        Text = text,
+        TextColor3 = COLORS.Gray,
+        TextSize = 11,
+        Font = Enum.Font.GothamMedium,
+        AutoButtonColor = true,
+        ZIndex = 3
+    }, sidebar)
 
-round(button, 8)  
+    round(button, 8)
 
-local indicator = create("Frame", {  
-    Name = "Indicator",  
-    Position = UDim2.fromOffset(0, 9),  
-    Size = UDim2.fromOffset(3, 19),  
-    BackgroundColor3 = COLORS.PurpleLight,  
-    BorderSizePixel = 0,  
-    Visible = false,  
-    ZIndex = 4  
-}, button)  
+    local indicator = create("Frame", {
+        Name = "Indicator",
+        Position = UDim2.fromOffset(0, 9),
+        Size = UDim2.fromOffset(3, 19),
+        BackgroundColor3 = COLORS.PurpleLight,
+        BorderSizePixel = 0,
+        Visible = false,
+        ZIndex = 4
+    }, button)
 
-round(indicator, 2)  
+    round(indicator, 2)
 
-tabs[name] = {  
-    Button = button,  
-    Indicator = indicator  
-}  
+    tabs[name] = {
+        Button = button,
+        Indicator = indicator
+    }
 
-return button
-
+    return button
 end
 
 createTab("Principal", "鈱�  Principal", 34)
