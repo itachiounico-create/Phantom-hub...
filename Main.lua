@@ -729,8 +729,6 @@ local function createCounter(name, color, position, width)
         BorderSizePixel = 0
     }, item)
 
-    return text
-end
 
 local fpsLabel = createCounter(
     "FPS", COLORS.PurpleLight, 0, 52
