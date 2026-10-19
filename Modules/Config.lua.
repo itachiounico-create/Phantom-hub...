@@ -2,20 +2,34 @@
 local Config = {}
 
 Config.Name = "PHANTOM"
-Config.Version = "0.1.0"
+Config.Subtitle = "MENU"
+Config.Version = "1.0.0"
 
 Config.Theme = {
-    Background = Color3.fromRGB(15, 13, 22),
-    Secondary = Color3.fromRGB(25, 22, 35),
-    Accent = Color3.fromRGB(155, 90, 255),
-    Text = Color3.fromRGB(255, 255, 255),
-    Muted = Color3.fromRGB(165, 160, 180),
+    Background = Color3.fromRGB(5, 4, 12),
+    Panel = Color3.fromRGB(12, 10, 24),
+    Secondary = Color3.fromRGB(20, 15, 38),
+
+    Purple = Color3.fromRGB(115, 45, 255),
+    PurpleLight = Color3.fromRGB(174, 125, 255),
+    PurpleDark = Color3.fromRGB(65, 20, 155),
+
+    White = Color3.fromRGB(245, 240, 255),
+    TextSecondary = Color3.fromRGB(155, 148, 180),
+    Border = Color3.fromRGB(65, 40, 115),
+
+    Success = Color3.fromRGB(55, 230, 160),
 }
 
 Config.Window = {
-    Width = 320,
-    Height = 300,
-    SidebarWidth = 88,
+    Width = 720,
+    Height = 440,
+    CornerRadius = 12,
+}
+
+Config.Tabs = {
+    "Home",
+    "Settings",
 }
 
 return Config
