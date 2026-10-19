@@ -1723,4 +1723,194 @@ themeStatus.Text = themeWasLoaded
     and "Ultimas cores salvas carregadas."
     or "Tema padrao carregado."
 
+==================================================
+-- CONTROLE DE ABERTURA
+-- Declarado antes dos eventos dos botoes
+--==================================================
 
+local function setMenuOpen(isOpen)
+window.Visible = isOpen
+openButton.Visible = not isOpen
+end
+
+-- TROCA DE PAGINA
+local function showPage(name)
+if not pages[name] then
+return
+end
+
+currentPage = name  
+
+for pageName, page in pairs(pages) do  
+    page.Visible = (pageName == name)  
+end  
+
+for tabName, tab in pairs(tabs) do  
+    local selected = (tabName == name)  
+
+   
+tab.Button.BackgroundColor3 = selected
+    and Color3.fromRGB(57, 39, 81)
+    or COLORS.Element
+
+tab.Button.TextColor3 = selected
+    and COLORS.PurpleLight
+    or COLORS.Gray
+
+tab.Indicator.Visible = selected
+ 
+end
+
+end
+
+tabs.Principal.Button.Activated:Connect(function()
+showPage("Principal")
+end)
+
+tabs.Ajustes.Button.Activated:Connect(function()
+showPage("Ajustes")
+end)
+
+tabs.ESPVisual.Button.Activated:Connect(function()
+    showPage("ESPVisual")
+end)
+
+
+closeButton.Activated:Connect(function()
+setMenuOpen(false)
+end)
+
+--==================================================
+-- ARRASTAR A MASCARA E ABRIR AO TOCAR
+--==================================================
+
+local buttonDragging = false
+local buttonMoved = false
+local buttonDragStart
+local buttonStartPosition
+local buttonDragInput
+
+openButton.InputBegan:Connect(function(input)
+if input.UserInputType == Enum.UserInputType.Touch
+or input.UserInputType == Enum.UserInputType.MouseButton1 then
+
+buttonDragging = true  
+    buttonMoved = false  
+    buttonDragStart = input.Position  
+    buttonStartPosition = openButton.Position  
+    buttonDragInput = input  
+end
+
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+if not buttonDragging then
+return
+end
+
+local isMouseMove =  
+    input.UserInputType == Enum.UserInputType.MouseMovement  
+
+local isTouchMove =  
+    input.UserInputType == Enum.UserInputType.Touch  
+
+if isMouseMove or isTouchMove then  
+    local delta = input.Position - buttonDragStart  
+
+    if delta.Magnitude > 7 then  
+        buttonMoved = true  
+    end  
+
+    if buttonMoved then  
+        openButton.Position = UDim2.new(  
+            buttonStartPosition.X.Scale,  
+            buttonStartPosition.X.Offset + delta.X,  
+            buttonStartPosition.Y.Scale,  
+            buttonStartPosition.Y.Offset + delta.Y  
+        )  
+    end  
+end
+
+end)
+
+UserInputService.InputEnded:Connect(function(input)
+local sameInput = input == buttonDragInput
+local mouseReleased =
+input.UserInputType == Enum.UserInputType.MouseButton1
+
+if buttonDragging and (sameInput or mouseReleased) then  
+    buttonDragging = false  
+    buttonDragInput = nil  
+
+    if not buttonMoved then  
+        setMenuOpen(true)  
+    end  
+
+    buttonMoved = false  
+end
+
+end)
+
+--==================================================
+-- ARRASTAR A JANELA PELO CABECALHO
+--==================================================
+
+local windowDragging = false
+local windowDragStart
+local windowStartPosition
+local windowDragInput
+
+header.InputBegan:Connect(function(input)
+if input.UserInputType == Enum.UserInputType.Touch
+or input.UserInputType == Enum.UserInputType.MouseButton1 then
+
+windowDragging = true  
+    windowDragStart = input.Position  
+    windowStartPosition = window.Position  
+    windowDragInput = input  
+end
+
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+if not windowDragging then
+return
+end
+
+local isMouseMove =  
+    input.UserInputType == Enum.UserInputType.MouseMovement  
+
+local isTouchMove =  
+    input.UserInputType == Enum.UserInputType.Touch  
+
+if isMouseMove or isTouchMove then  
+    local delta = input.Position - windowDragStart  
+
+    window.Position = UDim2.new(  
+        windowStartPosition.X.Scale,  
+        windowStartPosition.X.Offset + delta.X,  
+        windowStartPosition.Y.Scale,  
+        windowStartPosition.Y.Offset + delta.Y  
+    )  
+end
+
+end)
+
+UserInputService.InputEnded:Connect(function(input)
+if input == windowDragInput
+or input.UserInputType == Enum.UserInputType.MouseButton1 then
+
+windowDragging = false  
+    windowDragInput = nil  
+end
+
+end)
+
+--==================================================
+-- INICIALIZACAO
+--==================================================
+
+showPage("Principal")
+setMenuOpen(true)
+
+print("[PHANTOM V3] Interface carregada.")
