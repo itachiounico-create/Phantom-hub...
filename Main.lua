@@ -27,7 +27,6 @@ local function createTab(name, order, callback)
 
     button.LayoutOrder = order
     button.Size = UDim2.new(1, 0, 0, 40)
-
     button.Activated:Connect(callback)
 
     return button
@@ -42,5 +41,34 @@ createTab("⚙  Configurações", 2, function()
     homePage.Visible = false
     settingsPage.Visible = true
 end)
+
+-- Controle de abrir e fechar o menu
+local main = ui.Main
+local isOpen = true
+
+local function setMenuOpen(open)
+    isOpen = open
+    main.Visible = open
+end
+
+-- Deixa o menu visível inicialmente
+setMenuOpen(true)
+
+-- Permite que outros scripts controlem o menu
+local menuController = Instance.new("BindableFunction")
+menuController.Name = "PhantomMenuController"
+menuController.Parent = ui.ScreenGui
+
+menuController.OnInvoke = function(action)
+    if action == "Toggle" then
+        setMenuOpen(not isOpen)
+    elseif action == "Open" then
+        setMenuOpen(true)
+    elseif action == "Close" then
+        setMenuOpen(false)
+    end
+
+    return isOpen
+end
 
 print("Phantom Menu carregado!")
