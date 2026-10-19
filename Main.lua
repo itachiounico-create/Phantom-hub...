@@ -1,5 +1,4 @@
 
-
 --==================================================
 -- PHANTOM V3 | MOBILE UI
 -- Interface visual completa
@@ -35,7 +34,7 @@ Red = Color3.fromRGB(255, 105, 125)
 }
 
 --==================================================
--- PHANTOM V3 | CORES PERSONALIZAVEIS
+-- PHANTOM V3 | CORES PERSONALIZAVEIS 
 -- Persistencia local
 --==================================================
 
@@ -57,7 +56,6 @@ local THEME_DEFAULTS = {
 }
 
 local themeSelected = {}
-
 for key, value in pairs(THEME_DEFAULTS) do
     themeSelected[key] = value
 end
@@ -118,8 +116,7 @@ local function saveTheme()
     local encodedOK, contents = pcall(function()
         return HttpService:JSONEncode(themeSelected)
     end)
-
-    if not encodedOK then
+       if not encodedOK then
         return false, "Erro ao preparar as cores"
     end
 
@@ -178,7 +175,7 @@ CornerRadius = UDim.new(0, radius or 10)
 end
 
 local function outline(object, color, thickness)
-return create("UIStroke", {
+    return create("UIStroke", {
 Color = color or COLORS.Purple,
 Thickness = thickness or 1,
 Transparency = 0.18
@@ -298,7 +295,7 @@ outline(orbit, COLORS.PurpleLight, 1.7)
 
 -- ORBITA INTERNA
 local orbit2 = create("Frame", {
-    Name = "SecondaryOrbit",
+            Name = "SecondaryOrbit",
     AnchorPoint = Vector2.new(0.5, 0.5),
     Position = UDim2.fromScale(0.5, 0.5),
     Size = UDim2.fromOffset(39, 13),
@@ -358,7 +355,7 @@ TweenService:Create(
         1.4,
         Enum.EasingStyle.Sine,
         Enum.EasingDirection.InOut,
-        -1,
+                -1,
         true
     ),
     {
@@ -383,6 +380,74 @@ Visible = true,
 ClipsDescendants = true,
 ZIndex = 1
 }, gui)
+
+local windowScale = create("UIScale", { 
+    Name = "WindowScale",
+    Scale = 1
+}, window)
+--==================================================
+-- PHANTOM V3 | CONFIGURACAO DE TAMANHO
+--==================================================
+
+local SIZE_FILE = "PhantomV3_WindowSize.json"
+
+local MIN_WINDOW_SCALE = 0.75
+local MAX_WINDOW_SCALE = 1.25
+local DEFAULT_WINDOW_SCALE = 1
+
+local function loadWindowScale()
+    if not (isfile and readfile) then
+        return DEFAULT_WINDOW_SCALE
+    end
+
+    local success, result = pcall(function()
+        if not isfile(SIZE_FILE) then
+            return DEFAULT_WINDOW_SCALE
+        end
+
+        local data = game:GetService("HttpService"):JSONDecode(
+            readfile(SIZE_FILE)
+        )
+
+        local scale = tonumber(data.Scale)
+
+        if scale then
+            return math.clamp(
+                scale,
+                MIN_WINDOW_SCALE,
+                                    MAX_WINDOW_SCALE
+            )
+        end
+
+        return DEFAULT_WINDOW_SCALE
+    end)
+
+    if success then
+        return result
+    end
+
+    return DEFAULT_WINDOW_SCALE
+end
+
+local function saveWindowScale(scale)
+    if not (writefile and isfile) then
+        return false
+    end
+
+    local success = pcall(function()
+        local data = {
+            Scale = scale
+        }
+
+        writefile(
+            SIZE_FILE,
+            game:GetService("HttpService"):JSONEncode(data)
+        )
+    end)
+
+    return success
+end
+windowScale.Scale = loadWindowScale()
 
 round(window, 14)
 
@@ -410,7 +475,7 @@ local borderGradient = create("UIGradient", {
             Color3.fromRGB(245, 225, 255)
         ),
         ColorSequenceKeypoint.new(
-            0.58,
+                                0.58,
             Color3.fromRGB(157, 91, 255)
         ),
         ColorSequenceKeypoint.new(
@@ -471,7 +536,7 @@ create("Frame", {
 
 local titleLabel = label(
     header,
-    "◈  PHANTOM",
+    "鈼�  PHANTOM",
     UDim2.fromOffset(13, 2),
     UDim2.new(1, -65, 0, 25),
     COLORS.White,
@@ -509,7 +574,7 @@ Size = UDim2.fromOffset(27, 27),
 BackgroundColor3 = Color3.fromRGB(57, 32, 73),
 TextColor3 = COLORS.PurpleLight,
 TextSize = 21,
-Text = "×",
+Text = "脳",
 Font = Enum.Font.GothamBold,
 AutoButtonColor = true,
 ZIndex = 4
@@ -530,7 +595,7 @@ ZIndex = 2
 round(sidebar, 14)
 create("Frame", {
     Name = "SidebarTopFill",
-    Position = UDim2.new(0, 0, 0, 0),
+        Position = UDim2.new(0, 0, 0, 0),
     Size = UDim2.new(1, 0, 0, 14),
     BackgroundColor3 = COLORS.Panel,
     BorderSizePixel = 0,
@@ -590,7 +655,7 @@ local function createPage(name)
 local page = create("Frame", {
 Name = name,
 Size = UDim2.fromScale(1, 1),
-BackgroundTransparency = 1,
+            BackgroundTransparency = 1,
 Visible = false,
 ZIndex = 2
 }, pageHost)
@@ -599,6 +664,246 @@ pages[name] = page
 return page
 
 end
+
+local visualPage = createPage("ESPVisual")
+
+
+
+        -- A atualiza莽茫o dos indicadores ser谩 conectada
+        -- na pr贸xima etapa.
+    end)
+
+    refresh()
+end
+
+createVisualToggle(
+    "ESP / VISUAL ALL",
+    "Ativar ou desativar os indicadores",
+    "master",
+    0
+)
+
+createVisualToggle(
+    "NOME",
+    "Mostrar nomes dos personagens",
+    "name",
+    1
+)
+
+createVisualToggle(
+    "DIST脗NCIA",
+    "Mostrar dist芒ncia dos personagens",
+    "distance",
+    2
+)
+
+createVisualToggle(
+    "VIDA 3D",
+    "Mostrar barra visual de vida",
+    "health",
+    3
+)
+
+--==================================================
+-- PHANTOM V3 | VISUAL INDICATORS
+-- Para testes na propria experiencia Roblox
+--==================================================
+
+local RunService = game:GetService("RunService")
+
+local visualMarkers = {}
+local visualConnections = {}
+
+local function removeVisualMarker(target)
+    local data = visualMarkers[target]
+    if not data then return end
+
+    if data.gui then
+        data.gui:Destroy()
+    end
+
+    if data.healthGui then
+        data.healthGui:Destroy()
+    end
+
+    visualMarkers[target] = nil
+end
+
+local function createVisualMarker(target)
+    if target == player or visualMarkers[target] then
+        return
+    end
+
+    local character = target.Character
+    if not character then return end
+
+    local humanoid = character:FindFirstChildOfClass("Humanoid")
+    local root = character:FindFirstChild("HumanoidRootPart")
+    if not humanoid or not root then return end
+
+    local billboard = Instance.new("BillboardGui")
+    billboard.Name = "PhantomVisualMarker"
+    billboard.Adornee = root
+    billboard.Size = UDim2.fromOffset(160, 38)
+    billboard.StudsOffset = Vector3.new(0, 3, 0)
+    billboard.AlwaysOnTop = true
+    billboard.Enabled = false
+    billboard.Parent = playerGui
+
+    local text = Instance.new("TextLabel")
+    text.Name = "Info"
+    text.Size = UDim2.fromScale(1, 1)
+    text.BackgroundTransparency = 1
+    text.Font = Enum.Font.GothamMedium
+    text.TextSize = 11
+    text.TextColor3 = Color3.fromRGB(194, 151, 255)
+    text.TextStrokeTransparency = 0.35
+    text.TextWrapped = true
+    text.Parent = billboard
+
+    local healthGui = Instance.new("BillboardGui")
+    healthGui.Name = "PhantomHealthMarker"
+    healthGui.Adornee = root
+    healthGui.Size = UDim2.fromOffset(12, 60)
+    healthGui.StudsOffset = Vector3.new(-2.8, 0, 0)
+    healthGui.AlwaysOnTop = true
+    healthGui.Enabled = false
+    healthGui.Parent = playerGui
+
+    local back = Instance.new("Frame")
+    back.Size = UDim2.fromScale(1, 1)
+    back.BackgroundColor3 = Color3.fromRGB(35, 30, 45)
+    back.BorderSizePixel = 0
+    back.Parent = healthGui
+
+    local fill = Instance.new("Frame")
+    fill.Name = "Fill"
+    fill.AnchorPoint = Vector2.new(0, 1)
+    fill.Position = UDim2.fromScale(0, 1)
+    fill.Size = UDim2.fromScale(1, 1)
+    fill.BackgroundColor3 = Color3.fromRGB(103, 230, 166)
+    fill.BorderSizePixel = 0
+    fill.Parent = back
+
+    visualMarkers[target] = {
+        gui = billboard,
+        text = text,
+        healthGui = healthGui,
+        fill = fill,
+        humanoid = humanoid,
+        root = root
+    }
+end
+
+local function refreshVisualMarkers()
+    for target, data in pairs(visualMarkers) do
+        local character = target.Character
+        local humanoid = character
+            and character:FindFirstChildOfClass("Humanoid")
+        local root = character
+            and character:FindFirstChild("HumanoidRootPart")
+
+        if not character or not humanoid or not root
+            or not character:IsDescendantOf(workspace) then
+            removeVisualMarker(target)
+            continue
+        end
+
+        data.humanoid = humanoid
+        data.root = root
+        data.gui.Adornee = root
+        data.healthGui.Adornee = root
+
+        local myCharacter = player.Character
+        local myRoot = myCharacter
+            and myCharacter:FindFirstChild("HumanoidRootPart")
+
+        local distanceText = ""
+        if visualSettings.distance and myRoot then
+            local distance = (myRoot.Position - root.Position).Magnitude
+            distanceText = string.format("%.0f studs", distance)
+        end
+
+        local nameText = visualSettings.name and target.DisplayName or ""
+        local pieces = {}
+
+        if nameText ~= "" then
+            table.insert(pieces, nameText)
+        end
+
+        if distanceText ~= "" then
+            table.insert(pieces, distanceText)
+end
+data.text.Text = table.concat(pieces, " | ")
+
+        local active = visualSettings.master
+        data.gui.Enabled = active
+            and (visualSettings.name or visualSettings.distance)
+            and #pieces > 0
+
+        data.healthGui.Enabled = active
+            and visualSettings.health
+            and humanoid.Health > 0
+
+        local ratio = 0
+        if humanoid.MaxHealth > 0 then
+            ratio = math.clamp(humanoid.Health / humanoid.MaxHealth, 0, 1)
+        end
+
+        data.fill.Size = UDim2.fromScale(1, ratio)
+        data.fill.BackgroundColor3 = Color3.fromRGB(
+            255 * (1 - ratio),
+            230 * ratio,
+            100
+        )
+    end
+end
+
+local function addVisualPlayer(target)
+    if target == player then return end
+
+    createVisualMarker(target)
+
+    if visualConnections[target] then
+        visualConnections[target]:Disconnect()
+    end
+
+    visualConnections[target] = target.CharacterAdded:Connect(function()
+        removeVisualMarker(target)
+
+        task.defer(function()
+            if target.Parent == Players then
+                createVisualMarker(target)
+            end
+        end)
+    end)
+end
+
+for _, target in ipairs(Players:GetPlayers()) do
+    addVisualPlayer(target)
+end
+
+Players.PlayerAdded:Connect(addVisualPlayer)
+
+Players.PlayerRemoving:Connect(function(target)
+    removeVisualMarker(target)
+
+    if visualConnections[target] then
+        visualConnections[target]:Disconnect()
+        visualConnections[target] = nil
+    end
+end)
+
+RunService.Heartbeat:Connect(refreshVisualMarkers)
+
+-- Atualiza a visibilidade imediatamente ao tocar nos controles.
+-- Conectamos isso aos toggles existentes pelo estado compartilhado.
+for _, target in ipairs(Players:GetPlayers()) do
+    if target ~= player then
+        createVisualMarker(target)
+    end
+end
+
 
 local function createTab(name, text, y)
 local button = create("TextButton", {
@@ -637,8 +942,10 @@ return button
 
 end
 
-createTab("Principal", "⌂  Principal", 34)
-createTab("Ajustes", "⚙  Ajustes", 77)
+createTab("Principal", "鈱�  Principal", 34)
+createTab("Ajustes", "鈿�  Ajustes", 77)
+createTab("ESPVisual", "鈼�  ESP / VISUAL", 120)
+
 
 --==================================================
 -- PAGINA PRINCIPAL
@@ -647,7 +954,7 @@ createTab("Ajustes", "⚙  Ajustes", 77)
 local home = createPage("Principal")
 
 local homeScroll = create("ScrollingFrame", {
-    Name = "HomeScroll",
+Name = "HomeScroll",
     Position = UDim2.fromOffset(0, 28),
     Size = UDim2.new(1, 0, 1, -28),
     BackgroundTransparency = 1,
@@ -655,8 +962,8 @@ local homeScroll = create("ScrollingFrame", {
     ScrollBarThickness = 3,
     ScrollBarImageColor3 = COLORS.Purple,
     ScrollingDirection = Enum.ScrollingDirection.Y,
-    AutomaticCanvasSize = Enum.AutomaticSize.Y,
-    CanvasSize = UDim2.new(0, 0, 0, 0),
+    AutomaticCanvasSize = Enum.AutomaticSize.None,
+    CanvasSize = UDim2.new(0, 0, 0, 320),
     Active = true,
     ZIndex = 3
 }, home)
@@ -725,7 +1032,7 @@ local playersLabel = createCounter(
     "JOGADORES", Color3.fromRGB(107, 231, 160), 118, 82
 )
 
--- Atualização periódica dos valores
+-- Atualiza莽茫o peri贸dica dos valores
 local elapsed = 0
 local frames = 0
 local currentFPS = 0
@@ -766,9 +1073,8 @@ end)
 local welcome = card(
     homeScroll,
     "WelcomeCard",
-"WelcomeCard",
-UDim2.fromOffset(0, 76),
-UDim2.new(1, 0, 0, 65)
+    UDim2.fromOffset(0, 76),
+    UDim2.new(1, 0, 0, 65)
 )
 
 local welcomeDivider = create("Frame", {
@@ -781,26 +1087,24 @@ local welcomeDivider = create("Frame", {
     ZIndex = 3
 }, welcome)
 
+label(
+    welcome,
+    "Bem-vindo ao PHANTOM",
+    UDim2.fromOffset(10, 8),
+    UDim2.new(1, -20, 0, 22),
+    COLORS.White,
+    11,
+    true
+)
 
 label(
-welcome,
-"Bem-vindo ao PHANTOM",
-UDim2.fromOffset(10, 8),
-UDim2.new(1, -20, 0, 22),
-COLORS.White,
-11,
-true
-)
-
-local welcome = card(
-    homeScroll,
-    "WelcomeCard",
-    UDim2.fromOffset(0, 76),
-    UDim2.new(1, 0, 0, 65)
-)
-COLORS.Gray,
-9,
-false
+    welcome,
+    "Seu espaco de configuracao",
+    UDim2.fromOffset(10, 33),
+    UDim2.new(1, -20, 0, 19),
+    COLORS.Gray,
+    9,
+    false
 )
 
 local statusCard = card(
@@ -822,7 +1126,7 @@ true
 
 local statusLabel = label(
 statusCard,
-"●  Interface carregada",
+"鈼�  Interface carregada",
 UDim2.fromOffset(10, 27),
 UDim2.new(1, -20, 0, 22),
 COLORS.Green,
@@ -883,8 +1187,6 @@ true
 )
 
 
-
-
 --==================================================
 -- PHANTOM V3 | PERSONALIZACAO DO TEMA
 -- Dentro da pagina AJUSTES
@@ -893,7 +1195,7 @@ true
 local themeScroll = create("ScrollingFrame", {
     Name = "ThemeColorScroll",
     Position = UDim2.fromOffset(0, 28),
-    Size = UDim2.new(1, 0, 1, -91),
+    Size = UDim2.new(1, 0, 1, -50),
     BackgroundTransparency = 1,
     BorderSizePixel = 0,
     ScrollBarThickness = 3,
@@ -908,7 +1210,7 @@ local themeScroll = create("ScrollingFrame", {
 local themeStatus = label(
     settings,
     "",
-    UDim2.new(0, 0, 1, -48),
+    UDim2.new(0, 0, 1, -22),
     UDim2.new(1, 0, 0, 14),
     COLORS.Gray,
     8,
@@ -987,6 +1289,9 @@ local function applyAllThemeColors()
         end
     end
 end
+local saveThemeButton
+local resetThemeButton
+local sizePanel
 
 local function updateThemeLayout()
     local y = 0
@@ -1005,7 +1310,19 @@ local function updateThemeLayout()
         y = y + height + 5
     end
 
-    themeScroll.CanvasSize = UDim2.fromOffset(0, y + 2)
+
+    if saveThemeButton and resetThemeButton then
+        saveThemeButton.Position = UDim2.new(0, 0, 0, y + 2)
+        resetThemeButton.Position = UDim2.new(0.5, 3, 0, y + 2)
+      y = y + 29
+    end
+
+    if sizePanel then
+        sizePanel.Position = UDim2.fromOffset(0, y + 8)
+        y = y + 116
+    end
+
+    themeScroll.CanvasSize = UDim2.fromOffset(0, y + 250)
 end
 
 local function makeThemeSection(def)
@@ -1116,7 +1433,7 @@ local function makeThemeSection(def)
             BorderSizePixel = 0,
             AutoButtonColor = true,
             ZIndex = 4
-        }, options)
+            }, options)
 
         round(button, 4)
 
@@ -1218,9 +1535,9 @@ for _, def in ipairs(themeDefinitions) do
 end
 
 -- Botao salvar
-local saveThemeButton = create("TextButton", {
+saveThemeButton = create("TextButton", {
     Name = "SaveThemeButton",
-    Position = UDim2.new(0, 0, 1, -27),
+    Position = UDim2.fromOffset(0, 0),
     Size = UDim2.new(0.5, -3, 0, 22),
     BackgroundColor3 = Color3.fromRGB(65, 45, 80),
     Text = "SALVAR CORES",
@@ -1229,14 +1546,14 @@ local saveThemeButton = create("TextButton", {
     TextSize = 9,
     BorderSizePixel = 0,
     ZIndex = 4
-}, settings)
+}, themeScroll)
 
 round(saveThemeButton, 6)
 
 -- Botao resetar
-local resetThemeButton = create("TextButton", {
+resetThemeButton = create("TextButton", {
     Name = "ResetThemeButton",
-    Position = UDim2.new(0.5, 3, 1, -27),
+    Position = UDim2.fromOffset(0, 0),
     Size = UDim2.new(0.5, -3, 0, 22),
     BackgroundColor3 = COLORS.Element,
     Text = "RESETAR CORES",
@@ -1245,7 +1562,7 @@ local resetThemeButton = create("TextButton", {
     TextSize = 9,
     BorderSizePixel = 0,
     ZIndex = 4
-}, settings)
+}, themeScroll)
 
 round(resetThemeButton, 6)
 
@@ -1277,453 +1594,182 @@ themeStatus.Text = themeWasLoaded
     and "Ultimas cores salvas carregadas."
     or "Tema padrao carregado."
 
-
 --==================================================
--- CONTROLE DE ABERTURA
--- Declarado antes dos eventos dos botoes
+-- PHANTOM V3 | CONTROLE DE TAMANHO
 --==================================================
 
-local function setMenuOpen(isOpen)
-window.Visible = isOpen
-openButton.Visible = not isOpen
-end
 
--- TROCA DE PAGINA
-local function showPage(name)
-if not pages[name] then
-return
-end
-
-currentPage = name  
-
-for pageName, page in pairs(pages) do  
-    page.Visible = (pageName == name)  
-end  
-
-for tabName, tab in pairs(tabs) do  
-    local selected = (tabName == name)  
-
-   
-tab.Button.BackgroundColor3 = selected
-    and Color3.fromRGB(57, 39, 81)
-    or COLORS.Element
-
-tab.Button.TextColor3 = selected
-    and COLORS.PurpleLight
-    or COLORS.Gray
-
-tab.Indicator.Visible = selected
- 
-end
-
-end
-
-tabs.Principal.Button.Activated:Connect(function()
-showPage("Principal")
-end)
-
-tabs.Ajustes.Button.Activated:Connect(function()
-showPage("Ajustes")
-end)
-
-closeButton.Activated:Connect(function()
-setMenuOpen(false)
-end)
-
-
---==================================================
--- PHANTOM V3 | PERSONALIZACAO DO TEMA
--- Dentro da pagina AJUSTES
---==================================================
-
-local themeScroll = create("ScrollingFrame", {
-    Name = "ThemeColorScroll",
-    Position = UDim2.fromOffset(0, 28),
-    Size = UDim2.new(1, 0, 1, -91),
+sizePanel = create("Frame", {
+    Name = "WindowSizePanel",
+    Position = UDim2.new(0, 0, 0, 160),
+    Size = UDim2.new(1, 0, 0, 100),
     BackgroundTransparency = 1,
-    BorderSizePixel = 0,
-    ScrollBarThickness = 3,
-    ScrollBarImageColor3 = COLORS.Purple,
-    ScrollingDirection = Enum.ScrollingDirection.Y,
-    AutomaticCanvasSize = Enum.AutomaticSize.None,
-    CanvasSize = UDim2.fromOffset(0, 0),
-    Active = true,
-    ZIndex = 3
-}, settings)
+    Visible = true,
+BackgroundColor3 = COLORS.Background,
+BackgroundTransparency = 1,
+BorderSizePixel = 0,
+ZIndex = 3
+}, themeScroll)
 
-local themeStatus = label(
-    settings,
-    "",
-    UDim2.new(0, 0, 1, -48),
-    UDim2.new(1, 0, 0, 14),
-    COLORS.Gray,
-    8,
-    false
+local sizeTitle = label(
+    sizePanel,
+    "TAMANHO DO MENU",
+    UDim2.fromOffset(0, 0),
+    UDim2.new(1, 0, 0, 20),
+    COLORS.PurpleLight,
+    12,
+    true
 )
-themeStatus.TextXAlignment = Enum.TextXAlignment.Center
 
-local themeSections = {}
-local expandedThemeKey = nil
+local sizeValue = label(
+    sizePanel,
+    "100%",
+    UDim2.fromOffset(0, 20),
+    UDim2.new(1, 0, 0, 22),
+    COLORS.White,
+    16,
+    true
+)
 
-local themeDefinitions = {
-    {key = "Barra", title = "BARRA LATERAL"},
-    {key = "Area", title = "AREA DAS PAGINAS"},
-    {key = "Neon", title = "ILUMINACAO NEON"},
-    {key = "Linha", title = "COR DA LINHA"}
-}
-
--- Aplicar uma cor em cada parte do menu
-local function applyThemeColor(key, color)
-    if key == "Barra" then
-        sidebar.BackgroundColor3 = color
-
-        local topFill = sidebar:FindFirstChild("SidebarTopFill")
-        local rightFill = sidebar:FindFirstChild("SidebarRightFill")
-
-        if topFill then
-            topFill.BackgroundColor3 = color
-        end
-
-        if rightFill then
-            rightFill.BackgroundColor3 = color
-        end
-
-    elseif key == "Area" then
-        pageHost.BackgroundColor3 = color
-        pageHost.BackgroundTransparency = 0
-
-    elseif key == "Neon" then
-    local dark = color:Lerp(Color3.new(0, 0, 0), 0.35)
-local bright = color:Lerp(Color3.new(1, 1, 1), 0.15)
-
-    windowStroke.Color = color
-
-    borderGradient.Color = ColorSequence.new({
-        ColorSequenceKeypoint.new(0, dark),
-        ColorSequenceKeypoint.new(0.42, color),
-        ColorSequenceKeypoint.new(0.5, bright),
-        ColorSequenceKeypoint.new(0.58, color),
-        ColorSequenceKeypoint.new(1, dark)
-    })
-
-    topAccent.BackgroundColor3 = color
-    themeScroll.ScrollBarImageColor3 = color
-
-    for _, tab in pairs(tabs) do
-        tab.Indicator.BackgroundColor3 = color
-        end
-
-        for _, tab in pairs(tabs) do
-            tab.Indicator.BackgroundColor3 = color
-        end
-
-    elseif key == "Linha" then
-        headerLine.BackgroundColor3 = color
-        sidebarDivider.BackgroundColor3 = color
-    end
-end
-
-local function applyAllThemeColors()
-    for key, colorName in pairs(themeSelected) do
-        applyThemeColor(key, THEME_PALETTE[colorName])
-
-        local section = themeSections[key]
-        if section then
-            section.refresh()
-        end
-    end
-end
-
-local function updateThemeLayout()
-    local y = 0
-
-    for _, def in ipairs(themeDefinitions) do
-        local section = themeSections[def.key]
-        local isOpen = expandedThemeKey == def.key
-
-        section.holder.Position = UDim2.fromOffset(0, y)
-
-        local height = isOpen and 145 or 39
-        section.holder.Size = UDim2.new(1, -2, 0, height)
-        section.options.Visible = isOpen
-        section.arrow.Text = isOpen and "-" or "+"
-
-        y = y + height + 5
-    end
-
-    themeScroll.CanvasSize = UDim2.fromOffset(0, y + 2)
-end
-
-local function makeThemeSection(def)
-    local holder = create("Frame", {
-        Name = def.key .. "ColorSection",
-        Position = UDim2.fromOffset(0, 0),
-        Size = UDim2.new(1, -2, 0, 39),
-        BackgroundTransparency = 1,
-        BorderSizePixel = 0,
-        ZIndex = 3
-    }, themeScroll)
-
-    local head = create("TextButton", {
-        Name = "SectionHeader",
-        Size = UDim2.new(1, 0, 0, 35),
-        BackgroundColor3 = COLORS.Element,
-        Text = "",
-        BorderSizePixel = 0,
-        AutoButtonColor = false,
-        ZIndex = 3
-    }, holder)
-
-    round(head, 7)
-    outline(head, COLORS.Purple, 1)
-
-    label(
-        head,
-        def.title,
-        UDim2.fromOffset(8, 1),
-        UDim2.new(1, -63, 0, 16),
-        COLORS.White,
-        9,
-        true
-    ).ZIndex = 4
-
-    local current = label(
-        head,
-        "Atual: " .. themeSelected[def.key],
-        UDim2.fromOffset(8, 17),
-        UDim2.new(1, -63, 0, 14),
-        COLORS.Gray,
-        8,
-        false
-    )
-    current.ZIndex = 4
-
-    local swatch = create("Frame", {
-        Name = "CurrentSwatch",
-        Position = UDim2.new(1, -43, 0, 9),
-        Size = UDim2.fromOffset(16, 16),
-        BackgroundColor3 = THEME_PALETTE[themeSelected[def.key]],
-        BorderSizePixel = 0,
-        ZIndex = 4
-    }, head)
-
-    round(swatch, 4)
-    outline(swatch, COLORS.PurpleLight, 1)
-
-    local arrow = label(
-        head,
-        "+",
-        UDim2.new(1, -24, 0, 0),
-        UDim2.fromOffset(20, 35),
-        COLORS.PurpleLight,
-        15,
-        true
-    )
-    arrow.Parent = head
-    arrow.ZIndex = 4
-    arrow.TextXAlignment = Enum.TextXAlignment.Center
-
-    local options = create("Frame", {
-        Name = "ColorOptions",
-        Position = UDim2.fromOffset(0, 39),
-        Size = UDim2.new(1, 0, 0, 104),
-        BackgroundColor3 = COLORS.Background,
-        BorderSizePixel = 0,
-        Visible = false,
-        ZIndex = 3
-    }, holder)
-
-    round(options, 6)
-
-    local entries = {}
-
-    local function readableThemeText(color)
-        local brightness =
-            color.R * 0.299 +
-            color.G * 0.587 +
-            color.B * 0.114
-
-        if brightness > 0.58 then
-            return Color3.fromRGB(18, 16, 23)
-        end
-
-        return COLORS.White
-    end
-
-    for i, colorName in ipairs({
-        "Vermelho", "Preto", "Roxo", "Branco"
-    }) do
-        local button = create("TextButton", {
-            Name = colorName .. "Option",
-            Position = UDim2.fromOffset(4, 3 + (i - 1) * 25),
-            Size = UDim2.new(1, -8, 0, 22),
-            BackgroundColor3 = COLORS.Element,
-            Text = "",
-            BorderSizePixel = 0,
-            AutoButtonColor = true,
-            ZIndex = 4
-        }, options)
-
-        round(button, 4)
-
-        local swatchOption = create("Frame", {
-            Position = UDim2.fromOffset(5, 3),
-            Size = UDim2.fromOffset(16, 16),
-            BackgroundColor3 = THEME_PALETTE[colorName],
-            BorderSizePixel = 0,
-            ZIndex = 5
-        }, button)
-
-        round(swatchOption, 3)
-
-        label(
-            button,
-            colorName,
-            UDim2.fromOffset(27, 0),
-            UDim2.new(1, -70, 1, 0),
-            readableThemeText(THEME_PALETTE[colorName]),
-            9,
-            false
-        ).ZIndex = 5
-
-        local status = label(
-            button,
-            "",
-            UDim2.new(1, -43, 0, 0),
-            UDim2.fromOffset(38, 22),
-            COLORS.PurpleLight,
-            8,
-            true
-        )
-        status.TextXAlignment = Enum.TextXAlignment.Right
-        status.ZIndex = 5
-
-        entries[colorName] = {
-            button = button,
-            status = status
-        }
-
-        button.Activated:Connect(function()
-            themeSelected[def.key] = colorName
-
-            applyThemeColor(
-                def.key,
-                THEME_PALETTE[colorName]
-            )
-
-            for _, section in pairs(themeSections) do
-                section.refresh()
-            end
-
-            themeStatus.Text = "Alteracao ainda nao salva."
-            themeStatus.TextColor3 = COLORS.Gray
-        end)
-    end
-
-    local section = {
-        holder = holder,
-        options = options,
-        arrow = arrow,
-        current = current,
-        swatch = swatch
-    }
-
-    function section.refresh()
-        local chosen = themeSelected[def.key]
-
-        current.Text = "Atual: " .. chosen
-        swatch.BackgroundColor3 = THEME_PALETTE[chosen]
-
-        for colorName, entry in pairs(entries) do
-            local active = colorName == chosen
-
-            entry.status.Text = active and "ATIVO" or ""
-            entry.button.BackgroundColor3 = active
-                and Color3.fromRGB(65, 45, 80)
-                or COLORS.Element
-        end
-    end
-
-    themeSections[def.key] = section
-
-    head.Activated:Connect(function()
-        if expandedThemeKey == def.key then
-            expandedThemeKey = nil
-        else
-            expandedThemeKey = def.key
-        end
-
-        updateThemeLayout()
-    end)
-
-    section.refresh()
-end
-
-for _, def in ipairs(themeDefinitions) do
-    makeThemeSection(def)
-end
-
--- Botao salvar
-local saveThemeButton = create("TextButton", {
-    Name = "SaveThemeButton",
-    Position = UDim2.new(0, 0, 1, -27),
-    Size = UDim2.new(0.5, -3, 0, 22),
-    BackgroundColor3 = Color3.fromRGB(65, 45, 80),
-    Text = "SALVAR CORES",
-    TextColor3 = COLORS.White,
-    Font = Enum.Font.GothamBold,
-    TextSize = 9,
-    BorderSizePixel = 0,
-    ZIndex = 4
-}, settings)
-
-round(saveThemeButton, 6)
-
--- Botao resetar
-local resetThemeButton = create("TextButton", {
-    Name = "ResetThemeButton",
-    Position = UDim2.new(0.5, 3, 1, -27),
-    Size = UDim2.new(0.5, -3, 0, 22),
+local sizeTrack = create("Frame", {
+    Name = "SizeTrack",
+    Position = UDim2.new(0, 12, 0, 51),
+    Size = UDim2.new(1, -24, 0, 6),
     BackgroundColor3 = COLORS.Element,
-    Text = "RESETAR CORES",
-    TextColor3 = COLORS.White,
-    Font = Enum.Font.GothamBold,
-    TextSize = 9,
     BorderSizePixel = 0,
     ZIndex = 4
-}, settings)
+}, sizePanel)
 
-round(resetThemeButton, 6)
+round(sizeTrack, 4)
 
-saveThemeButton.Activated:Connect(function()
-    local success, result = saveTheme()
+local sizeFill = create("Frame", {
+    Name = "SizeFill",
+    Size = UDim2.new(2 / 3, 0, 1, 0),
+    BackgroundColor3 = COLORS.Purple,
+    BorderSizePixel = 0,
+    ZIndex = 5
+}, sizeTrack)
 
-    themeStatus.Text = result
-    themeStatus.TextColor3 = success
-        and COLORS.Green
-        or COLORS.Red
-end)
+round(sizeFill, 4)
 
-resetThemeButton.Activated:Connect(function()
-    for key, colorName in pairs(THEME_DEFAULTS) do
-        themeSelected[key] = colorName
+local sizeKnob = create("TextButton", {
+    Name = "SizeKnob",
+    AnchorPoint = Vector2.new(0.5, 0.5),
+    Position = UDim2.new(2 / 3, 0, 0.5, 0),
+    Size = UDim2.fromOffset(18, 18),
+    BackgroundColor3 = COLORS.White,
+    Text = "",
+    BorderSizePixel = 0,
+    AutoButtonColor = false,
+    ZIndex = 6
+}, sizeTrack)
+
+round(sizeKnob, 9)
+
+local sizeSaveButton = create("TextButton", {
+    Name = "SaveWindowSizeButton",
+    Position = UDim2.fromOffset(0, 65),
+    Size = UDim2.new(1, 0, 0, 26),
+    BackgroundColor3 = Color3.fromRGB(65, 45, 80),
+    Text = "SALVAR TAMANHO",
+    TextColor3 = COLORS.White,
+Font = Enum.Font.GothamBold,
+    TextSize = 10,
+    BorderSizePixel = 0,
+    ZIndex = 4
+}, sizePanel)
+
+round(sizeSaveButton, 6)
+
+--==================================================
+-- PHANTOM V3 | LOGICA DO CONTROLE DE TAMANHO
+--==================================================
+
+local sizeDragging = false
+
+local function updateSizeSlider(inputX)
+    local trackX = sizeTrack.AbsolutePosition.X
+    local trackWidth = sizeTrack.AbsoluteSize.X
+
+    if trackWidth <= 0 then
+        return
     end
 
-    applyAllThemeColors()
+    local alpha = math.clamp(
+        (inputX - trackX) / trackWidth,
+        0,
+        1
+    )
 
-    themeStatus.Text = "Padrao restaurado. Salve para manter."
-    themeStatus.TextColor3 = COLORS.Gray
+    local scale = 0.50 + alpha * 0.75
+    scale = math.floor(scale * 100 + 0.5) / 100
+
+    windowScale.Scale = scale
+    sizeKnob.Position = UDim2.new(alpha, 0, 0.5, 0)
+    sizeFill.Size = UDim2.new(alpha, 0, 1, 0)
+    sizeValue.Text = tostring(math.floor(scale * 100 + 0.5)) .. "%"
+end
+
+local function beginSizeDrag(input)
+    sizeDragging = true
+    updateSizeSlider(input.Position.X)
+end
+
+sizeKnob.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1
+        or input.UserInputType == Enum.UserInputType.Touch then
+        beginSizeDrag(input)
+    end
 end)
 
--- Aplicar as cores carregadas ao iniciar
-applyAllThemeColors()
-updateThemeLayout()
+sizeTrack.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1
+        or input.UserInputType == Enum.UserInputType.Touch then
+        beginSizeDrag(input)
+    end
+end)
 
-themeStatus.Text = themeWasLoaded
-    and "Ultimas cores salvas carregadas."
-    or "Tema padrao carregado."
+UserInputService.InputChanged:Connect(function(input)
+    if sizeDragging then
+        if input.UserInputType == Enum.UserInputType.MouseMovement
+            or input.UserInputType == Enum.UserInputType.Touch then
+            updateSizeSlider(input.Position.X)
+        end
+    end
+end)
 
-==================================================
+UserInputService.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1
+        or input.UserInputType == Enum.UserInputType.Touch then
+        sizeDragging = false
+    end
+end)
+
+-- Carregar o tamanho salvo na regua
+do
+    local scale = windowScale.Scale
+    local alpha = (scale - 0.50) / 0.75
+
+    sizeKnob.Position = UDim2.new(alpha, 0, 0.5, 0)
+    sizeFill.Size = UDim2.new(alpha, 0, 1, 0)
+    sizeValue.Text = tostring(math.floor(scale * 100 + 0.5)) .. "%"
+end
+
+-- Salvar tamanho escolhido
+sizeSaveButton.Activated:Connect(function()
+    local success = saveWindowScale(windowScale.Scale)
+
+    if success then
+        sizeValue.Text = "SALVO: "
+            .. tostring(math.floor(windowScale.Scale * 100 + 0.5))
+            .. "%"
+    else
+        sizeValue.Text = "ERRO AO SALVAR"
+    end
+end)
+
+
+--==================================================
 -- CONTROLE DE ABERTURA
 -- Declarado antes dos eventos dos botoes
 --==================================================
@@ -1747,8 +1793,6 @@ end
 
 for tabName, tab in pairs(tabs) do  
     local selected = (tabName == name)  
-
-   
 tab.Button.BackgroundColor3 = selected
     and Color3.fromRGB(57, 39, 81)
     or COLORS.Element
@@ -1866,7 +1910,7 @@ or input.UserInputType == Enum.UserInputType.MouseButton1 then
 
 windowDragging = true  
     windowDragStart = input.Position  
-    windowStartPosition = window.Position  
+    windowStartPosition = window.Position 
     windowDragInput = input  
 end
 
