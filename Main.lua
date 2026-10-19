@@ -977,11 +977,7 @@ local bright = color:Lerp(Color3.new(1, 1, 1), 0.15)
     themeScroll.ScrollBarImageColor3 = color
 
     for _, tab in pairs(tabs) do
-        tab.Indicator.BackgroundColor3 = color
-        end
-
-        for _, tab in pairs(tabs) do
-            tab.Indicator.BackgroundColor3 = color
+    tab.Indicator.BackgroundColor3 = color
         end
 
     elseif key == "Linha" then
