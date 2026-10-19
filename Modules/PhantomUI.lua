@@ -4,6 +4,8 @@ local Components = require(script.Parent.Components)
 
 local PhantomUI = {}
 
+local LOGO_ID = "rbxassetid://8369018559"
+
 function PhantomUI.Create(playerGui)
     local gui = Instance.new("ScreenGui")
     gui.Name = "PhantomMenu"
@@ -24,11 +26,7 @@ function PhantomUI.Create(playerGui)
     main.Parent = gui
 
     Components.Round(main, Config.Window.CornerRadius)
-    Components.Outline(
-        main,
-        Config.Theme.Purple,
-        1.5
-    )
+    Components.Outline(main, Config.Theme.Purple, 1.5)
 
     local header = Instance.new("Frame")
     header.Name = "Header"
@@ -37,12 +35,23 @@ function PhantomUI.Create(playerGui)
     header.BorderSizePixel = 0
     header.Parent = main
 
-    Components.Label(
+    local logo = Instance.new("ImageLabel")
+    logo.Name = "PhantomLogo"
+    logo.Size = UDim2.fromOffset(48, 48)
+    logo.Position = UDim2.fromOffset(12, 10)
+    logo.BackgroundTransparency = 1
+    logo.Image = LOGO_ID
+    logo.ScaleType = Enum.ScaleType.Fit
+    logo.Parent = header
+
+    local title = Components.Label(
         header,
-        "PHANTOM  /  MENU",
-        23,
+        "PHANTOM / MENU",
+        21,
         Config.Theme.PurpleLight
-    ).Position = UDim2.fromOffset(22, 10)
+    )
+    title.Position = UDim2.fromOffset(68, 8)
+    title.Size = UDim2.new(1, -78, 0, 30)
 
     local subtitle = Components.Label(
         header,
@@ -50,7 +59,7 @@ function PhantomUI.Create(playerGui)
         10,
         Config.Theme.TextSecondary
     )
-    subtitle.Position = UDim2.fromOffset(24, 39)
+    subtitle.Position = UDim2.fromOffset(70, 38)
 
     local sidebar = Instance.new("Frame")
     sidebar.Name = "Sidebar"
