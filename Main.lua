@@ -1,63 +1,46 @@
 
-local Home = {}
+local Players = game:GetService("Players")
 
-function Home.Create(ui)
-    local content = ui.Content
-    local config = ui.Config
-    local components = ui.Components
+local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
 
-    local title = components.Label(
-        content,
-        "PHANTOM MENU",
-        22,
-        config.Theme.White
+local Modules = script.Parent.Modules
+local Pages = script.Parent.Pages
+
+local PhantomUI = require(Modules.PhantomUI)
+local Home = require(Pages.Home)
+local Settings = require(Pages.Settings)
+
+local ui = PhantomUI.Create(playerGui)
+
+local homePage = Home.Create(ui)
+local settingsPage = Settings.Create(ui)
+
+settingsPage.Visible = false
+
+local function createTab(name, order, callback)
+    local button = ui.Components.Button(
+        ui.Sidebar,
+        name,
+        ui.Config
     )
 
-    title.Position = UDim2.fromOffset(20, 18)
-    title.Size = UDim2.new(1, -40, 0, 32)
+    button.LayoutOrder = order
+    button.Size = UDim2.new(1, 0, 0, 40)
 
-    local description = components.Label(
-        content,
-        "Painel principal",
-        13,
-        config.Theme.TextSecondary
-    )
+    button.Activated:Connect(callback)
 
-    description.Position = UDim2.fromOffset(20, 52)
-    description.Size = UDim2.new(1, -40, 0, 24)
-
-    local card = Instance.new("Frame")
-    card.Name = "WelcomeCard"
-    card.Position = UDim2.fromOffset(20, 92)
-    card.Size = UDim2.new(1, -40, 0, 130)
-    card.BackgroundColor3 = config.Theme.Secondary
-    card.BorderSizePixel = 0
-    card.Parent = content
-
-    components.Round(card, 10)
-    components.Outline(card, config.Theme.Border, 1)
-
-    local welcome = components.Label(
-        card,
-        "BEM-VINDO AO PHANTOM",
-        18,
-        config.Theme.PurpleLight
-    )
-
-    welcome.Position = UDim2.fromOffset(16, 18)
-    welcome.Size = UDim2.new(1, -32, 0, 28)
-
-    local detail = components.Label(
-        card,
-        "Sua interface. Seu estilo.",
-        13,
-        config.Theme.TextSecondary
-    )
-
-    detail.Position = UDim2.fromOffset(16, 54)
-    detail.Size = UDim2.new(1, -32, 0, 24)
-
-    return content
+    return button
 end
 
-return Home
+createTab("⌂  Início", 1, function()
+    homePage.Visible = true
+    settingsPage.Visible = false
+end)
+
+createTab("⚙  Configurações", 2, function()
+    homePage.Visible = false
+    settingsPage.Visible = true
+end)
+
+print("Phantom Menu carregado!")
