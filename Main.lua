@@ -653,9 +653,9 @@ local function createTab(name, text, y)
     return button
 end
 
-createTab("Principal", "鈱�  Principal", 34)
-createTab("Ajustes", "鈿�  Ajustes", 77)
-createTab("ESPVisual", "鈼�  ESP / VISUAL", 120)
+createTab("Principal", "PRINCIPAL", 34)
+createTab("Ajustes", "AJUSTES", 77)
+createTab("ESPVisual", "ESP / VISUAL", 120)
 
 
 --==================================================
