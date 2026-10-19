@@ -789,6 +789,207 @@ createVisualToggle(
     3
 )
 
+--==================================================
+-- PHANTOM V3 | VISUAL INDICATORS
+-- Para testes na propria experiencia Roblox
+--==================================================
+
+local RunService = game:GetService("RunService")
+
+local visualMarkers = {}
+local visualConnections = {}
+
+local function removeVisualMarker(target)
+    local data = visualMarkers[target]
+    if not data then return end
+
+    if data.gui then
+        data.gui:Destroy()
+    end
+
+    if data.healthGui then
+        data.healthGui:Destroy()
+    end
+
+    visualMarkers[target] = nil
+end
+
+local function createVisualMarker(target)
+    if target == player or visualMarkers[target] then
+        return
+    end
+
+    local character = target.Character
+    if not character then return end
+
+    local humanoid = character:FindFirstChildOfClass("Humanoid")
+    local root = character:FindFirstChild("HumanoidRootPart")
+    if not humanoid or not root then return end
+
+    local billboard = Instance.new("BillboardGui")
+    billboard.Name = "PhantomVisualMarker"
+    billboard.Adornee = root
+    billboard.Size = UDim2.fromOffset(160, 38)
+    billboard.StudsOffset = Vector3.new(0, 3, 0)
+    billboard.AlwaysOnTop = true
+    billboard.Enabled = false
+    billboard.Parent = playerGui
+
+    local text = Instance.new("TextLabel")
+    text.Name = "Info"
+    text.Size = UDim2.fromScale(1, 1)
+    text.BackgroundTransparency = 1
+    text.Font = Enum.Font.GothamMedium
+    text.TextSize = 11
+    text.TextColor3 = Color3.fromRGB(194, 151, 255)
+    text.TextStrokeTransparency = 0.35
+    text.TextWrapped = true
+    text.Parent = billboard
+
+    local healthGui = Instance.new("BillboardGui")
+    healthGui.Name = "PhantomHealthMarker"
+    healthGui.Adornee = root
+    healthGui.Size = UDim2.fromOffset(12, 60)
+    healthGui.StudsOffset = Vector3.new(-2.8, 0, 0)
+    healthGui.AlwaysOnTop = true
+    healthGui.Enabled = false
+    healthGui.Parent = playerGui
+
+    local back = Instance.new("Frame")
+    back.Size = UDim2.fromScale(1, 1)
+    back.BackgroundColor3 = Color3.fromRGB(35, 30, 45)
+    back.BorderSizePixel = 0
+    back.Parent = healthGui
+
+    local fill = Instance.new("Frame")
+    fill.Name = "Fill"
+    fill.AnchorPoint = Vector2.new(0, 1)
+    fill.Position = UDim2.fromScale(0, 1)
+    fill.Size = UDim2.fromScale(1, 1)
+    fill.BackgroundColor3 = Color3.fromRGB(103, 230, 166)
+    fill.BorderSizePixel = 0
+    fill.Parent = back
+
+    visualMarkers[target] = {
+        gui = billboard,
+        text = text,
+        healthGui = healthGui,
+        fill = fill,
+        humanoid = humanoid,
+        root = root
+    }
+end
+
+local function refreshVisualMarkers()
+    for target, data in pairs(visualMarkers) do
+        local character = target.Character
+        local humanoid = character
+            and character:FindFirstChildOfClass("Humanoid")
+        local root = character
+            and character:FindFirstChild("HumanoidRootPart")
+
+        if not character or not humanoid or not root
+            or not character:IsDescendantOf(workspace) then
+            removeVisualMarker(target)
+            continue
+        end
+
+        data.humanoid = humanoid
+        data.root = root
+        data.gui.Adornee = root
+        data.healthGui.Adornee = root
+
+        local myCharacter = player.Character
+        local myRoot = myCharacter
+            and myCharacter:FindFirstChild("HumanoidRootPart")
+
+        local distanceText = ""
+        if visualSettings.distance and myRoot then
+            local distance = (myRoot.Position - root.Position).Magnitude
+            distanceText = string.format("%.0f studs", distance)
+        end
+
+        local nameText = visualSettings.name and target.DisplayName or ""
+        local pieces = {}
+
+        if nameText ~= "" then
+            table.insert(pieces, nameText)
+        end
+
+        if distanceText ~= "" then
+            table.insert(pieces, distanceText)
+        end
+
+        data.text.Text = table.concat(pieces, " | ")
+
+        local active = visualSettings.master
+        data.gui.Enabled = active
+            and (visualSettings.name or visualSettings.distance)
+            and #pieces > 0
+
+        data.healthGui.Enabled = active
+            and visualSettings.health
+            and humanoid.Health > 0
+
+        local ratio = 0
+        if humanoid.MaxHealth > 0 then
+            ratio = math.clamp(humanoid.Health / humanoid.MaxHealth, 0, 1)
+        end
+
+        data.fill.Size = UDim2.fromScale(1, ratio)
+        data.fill.BackgroundColor3 = Color3.fromRGB(
+            255 * (1 - ratio),
+            230 * ratio,
+            100
+        )
+    end
+end
+
+local function addVisualPlayer(target)
+    if target == player then return end
+
+    createVisualMarker(target)
+
+    if visualConnections[target] then
+        visualConnections[target]:Disconnect()
+    end
+
+    visualConnections[target] = target.CharacterAdded:Connect(function()
+        removeVisualMarker(target)
+
+        task.defer(function()
+            if target.Parent == Players then
+                createVisualMarker(target)
+            end
+        end)
+    end)
+end
+
+for _, target in ipairs(Players:GetPlayers()) do
+    addVisualPlayer(target)
+end
+
+Players.PlayerAdded:Connect(addVisualPlayer)
+
+Players.PlayerRemoving:Connect(function(target)
+    removeVisualMarker(target)
+
+    if visualConnections[target] then
+        visualConnections[target]:Disconnect()
+        visualConnections[target] = nil
+    end
+end)
+
+RunService.Heartbeat:Connect(refreshVisualMarkers)
+
+-- Atualiza a visibilidade imediatamente ao tocar nos controles.
+-- Conectamos isso aos toggles existentes pelo estado compartilhado.
+for _, target in ipairs(Players:GetPlayers()) do
+    if target ~= player then
+        createVisualMarker(target)
+    end
+end
+
 
 local function createTab(name, text, y)
 local button = create("TextButton", {
